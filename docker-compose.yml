@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  semantiq-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: semantiq_service
+    ports:
+      - "8000:8000"
+    environment:
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8000
+      - LOG_LEVEL=info
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

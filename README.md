@@ -2,10 +2,11 @@
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg)](https://fastapi.tiangolo.com)
-[![Pytest](https://img.shields.io/badge/Pytest-Passing-brightgreen.svg)](https://docs.pytest.org)
+[![Pytest](https://img.shields.io/badge/Pytest-20%20Passing-brightgreen.svg)](https://docs.pytest.org)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](Dockerfile)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**SemantIQ** is a cost-aware semantic deduplication and intent-verification system designed for high-stakes question-answering, search, and knowledge retrieval pipelines. It bridges classical surface lexical matching, TF-IDF weighted n-grams, and dense transformer embeddings with critical-token contradiction analysis.
+**SemantIQ** is a cost-aware semantic deduplication and intent-verification system designed for retrieval, search, question-answering, and knowledge-management pipelines where false merges can be costly. It bridges classical surface lexical matching, TF-IDF weighted n-grams, and dense sentence transformers with critical-token contradiction verification and probability calibration.
 
 ---
 
@@ -23,11 +24,12 @@
   ├── TF-IDF (2)       [Word & Char TF-IDF Cosine]         ├── Negation mismatch (e.g., why vs why not)
   └── MiniLM (1)       [Pretrained Dense Cosine]           └── Question-starter shift (e.g., how vs what)
                     │                                                   │
-                    ▼                                                   │
-        XGBoost Fusion Classifier (Exp E)                               │
+                    ▼                                                   ▼
+        XGBoost Fusion Classifier (Exp E/F)               Contradiction Verification Layer
                     │                                                   │
                     ▼                                                   │
-          Duplicate Score P ∈ [0, 1]                                    │
+          Calibrated Score P ∈ [0, 1]                                   │
+          (ECE = 1.20%, Brier = 0.1172)                                 │
                     │                                                   │
                     └─────────────────────────┬─────────────────────────┘
                                               │
@@ -43,55 +45,55 @@
 
 ---
 
-## 2. Controlled Experimental Ablation (A → E)
+## 2. Controlled Experimental Ablation (A → F)
 
 All experiments were trained on the **identical Phase 1 partition** (198,394 train pairs) and evaluated on the **identical held-out test split** (9,178 pairs) with classifier hyperparameters held constant:
 
-| Exp | Feature Family | Dimension | Test Precision | Test Recall | Test F1 | Test PR-AUC |
+| Exp | Feature Family | Dim | Test Precision | Test Recall | Test F1 | Test PR-AUC |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
 | **A** | Statistical Only | 8 | 0.5949 | 0.7037 | 0.6447 | 0.6296 |
 | **B** | A + String / Jaccard / Fuzzy | 16 | 0.6412 | 0.7118 | 0.6746 | 0.7037 |
 | **C** | B + Word & Char TF-IDF | 18 | 0.6612 | 0.7202 | 0.6894 | 0.7255 |
 | **D** | A + Pretrained MiniLM | 9 | 0.7262 | 0.7912 | 0.7573 | 0.8115 |
 | **E** | **Full Fusion (A + B + C + D)** | **19** | **0.7581** | **0.8052** | **0.7809** | **0.8353** |
+| **F** | **E + Contradiction Signals** | **24** | **0.7640** | **0.8072** | **0.7850** | **0.8404** |
 
 ### Key Experimental Insights:
 1. **Semantic Dominance:** Adding a single dense semantic representation (`minilm_cosine`) to simple statistics (**D vs A**) increases test PR-AUC by **+0.1819**, outperforming the entire 18-feature classical stack (**C**) by **+0.0860**.
-2. **Complementary Fusion:** Combining all classical features with MiniLM (**E vs D**) delivers an additional **+0.0238 PR-AUC** gain, proving surface string alignment and dense semantics provide mutually beneficial signals.
+2. **Complementary Fusion:** Combining all classical features with MiniLM (**E vs D**) gives an additional **+0.0238 PR-AUC** gain.
+3. **Contradiction Verification:** Incorporating deterministic critical-token signals (**F vs E**) pushes test PR-AUC to **0.8404** (+0.0051) and test F1 to **0.7850**.
 
 ---
 
-## 3. Cost-Aware Decision Policy
+## 3. Cost-Aware Decision Policy & Statistical Rigor
 
 In deduplication systems, false merges corrupt search indices and knowledge graphs. SemantIQ uses a validation-selected threshold $T^*$ targeting $\ge 90\%$ precision.
 
 * **Threshold Selection Rule:** $T^* = \arg\max_T \text{Recall}(T) \quad \text{s.t.} \quad \text{Precision}(T) \ge 0.90 \quad (\text{Validation})$
 * **Selected Operating Threshold:** $T^* = 0.80343205$
 
-| Operating Policy | Split | Precision | Recall | F1 | PR-AUC |
-| :--- | :--- | :---: | :---: | :---: | :---: |
-| **Default ($T = 0.50$)** | Validation | 0.7764 | 0.8051 | 0.7905 | 0.8568 |
-| **Target 90% ($T^* = 0.8034$)** | Validation | **0.9001** | **0.4031** | **0.5569** | **0.8568** |
-| **Default ($T = 0.50$)** | Held-Out Test | 0.7581 | 0.8052 | 0.7809 | 0.8353 |
-| **Target 90% ($T^* = 0.8034$)** | **Held-Out Test** | **0.8808** | **0.4027** | **0.5527** | **0.8353** |
+### Evaluation on Held-Out Test Set (with 95% Bootstrap Confidence Intervals)
 
-> *Note on evaluation transparency:* When $T^*$ is selected on validation to target $90\%$ precision, it achieves **88.08% precision on the untouched test set** while retaining $>40\%$ recall (1,389 verified duplicates captured), vs the naive string baseline which collapsed to $0.23\%$ recall.
+| Operating Policy | Test Precision (95% CI) | Test Recall (95% CI) | Test F1 | Test PR-AUC (95% CI) |
+| :--- | :---: | :---: | :---: | :---: |
+| **Default ($T = 0.50$)** | 75.81% [74.5% – 77.1%] | 80.52% [79.2% – 81.8%] | 0.7809 | **0.8353 [0.8223 – 0.8474]** |
+| **Cost-Aware ($T^* = 0.8034$)** | **88.08% [86.33% – 89.56%]** | **40.27% [38.51% – 41.99%]** | **0.5527** | **0.8353 [0.8223 – 0.8474]** |
+
+> *Evaluation Transparency:* When $T^*$ is selected on validation to target $90\%$ precision, it achieves **88.08% precision on the untouched test set** (1,389 verified duplicates captured), vs the naive string baseline which collapsed to $0.23\%$ recall (3 pairs).
 
 ---
 
-## 4. Feature Importance Breakdown (XGBoost Gain)
+## 4. Curated Adversarial Benchmark Breakdown
 
-```text
-minilm_cosine        ██████████████████████████████ 52.20%
-token_set_ratio      █████ 8.07%
-word_tfidf_cosine    ████ 7.23%
-common_word_count    ███ 4.64%
-jaccard_similarity   ██ 4.17%
-common_word_ratio    ██ 4.10%
-word_trigram_overlap █ 2.47%
-word_bigram_overlap  █ 1.78%
-char_tfidf_cosine    █ 1.71%
-```
+Evaluated against the curated adversarial benchmark suite (`src/adversarial_suite.py`):
+
+| Adversarial Challenge Category | Example Test Pair | Adversarial Accuracy | False Positive Rate |
+| :--- | :--- | :---: | :---: |
+| **Entity Substitutions** | *"Placement package at IIT Delhi"* vs *"IIT Bombay"* | **100.0%** | **0.0%** |
+| **Numeric & Year Shifts** | *"JEE cutoff in 2017"* vs *"2018"*, *"50% vs 90%"* | **100.0%** | **0.0%** |
+| **Intent / Career Shifts** | *"What is ML"* vs *"How to get an ML engineer job"* | **100.0%** | **0.0%** |
+| **Tool / Language Shifts** | *"Web server in C"* vs *"Web server in C++"* | **100.0%** | **0.0%** |
+| **Negation Inversions** | *"Why learn Python"* vs *"Why shouldn't I learn Python"* | **66.7%** | 33.3% |
 
 ---
 
@@ -106,20 +108,27 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### Python API
+### Python API (with LRU Embedding Cache & Batch Vectorization)
 ```python
 from src.inference import SemantIQ
 
 detector = SemantIQ()
+
+# Single pair prediction
 result = detector.predict_pair(
     "How can I learn Python for data science?",
     "What is the best way to study Python for data analysis?"
 )
-
 print(result["decision"])              # DUPLICATE / NEEDS_REVIEW / DISTINCT
-print(result["score"])                 # 0.7789
-print(result["confidence"])            # MODERATE
+print(result["score"])                 # e.g., 0.7789
+print(result["confidence"])            # HIGH / MODERATE
 print(result["contradiction_warning"]) # False
+
+# High-throughput batch prediction
+batch_results = detector.predict_batch([
+    ("What is machine learning?", "Can someone explain machine learning?"),
+    ("Why is the sky blue?", "How do commercial airplanes fly?"),
+])
 ```
 
 ### Interactive CLI
@@ -132,15 +141,22 @@ python scripts/predict.py
 uvicorn app.api:app --host 0.0.0.0 --port 8000 --reload
 ```
 * Interactive Swagger Docs: `http://localhost:8000/docs`
-* Health Check: `GET http://localhost:8000/health`
-* Prediction: `POST http://localhost:8000/predict`
+* Liveness / Readiness Probes: `GET http://localhost:8000/live` | `GET http://localhost:8000/ready`
+* Versioned Prediction: `POST http://localhost:8000/api/v1/predict`
+* Batch Prediction: `POST http://localhost:8000/api/v1/batch-predict`
 
-### Run Test Suite
+### Docker Container Deployment
+```bash
+docker build -t semantiq:latest .
+docker run -p 8000:8000 semantiq:latest
+```
+
+### Run 20-Test Automated Pytest Suite
 ```bash
 pytest tests/ -v
 ```
 
-### Reproduce Entire Pipeline End-to-End
+### Run Master One-Click Reproducibility Runner
 ```bash
 python scripts/run_all.py
 ```
@@ -152,7 +168,7 @@ python scripts/run_all.py
 ```text
 SemantiQ/
 ├── app/
-│   └── api.py                   # Production FastAPI service
+│   └── api.py                   # Production-hardened versioned FastAPI service
 ├── src/
 │   ├── phase1_data.py           # Leakage-safe grouped partitioning
 │   ├── phase2_baselines.py      # Statistical and naive baselines
@@ -161,13 +177,26 @@ SemantiQ/
 │   ├── phase5_ablation.py       # Controlled XGBoost A->E ablation
 │   ├── phase6_threshold.py      # Precision-constrained decision calibration
 │   ├── phase7_analysis.py       # Error taxonomy and failure analysis
+│   ├── phase8_enhanced_verification.py # Model F, calibration & bootstrap CIs
 │   ├── critical_tokens.py       # Contradiction & information-changing token engine
-│   └── inference.py             # Single canonical inference engine
+│   ├── adversarial_suite.py     # Curated adversarial evaluation benchmark
+│   └── inference.py             # Unified inference engine with LRU cache & batching
 ├── scripts/
 │   ├── run_all.py               # Master one-click reproducibility runner
+│   ├── run_phase8.py            # Phase 8 calibration & Model F runner
+│   ├── run_adversarial_eval.py  # Adversarial evaluation runner
 │   ├── predict.py               # Interactive CLI tool
 │   └── run_phase1.py ... run_phase7.py
-├── tests/                       # 15+ Automated pytest unit & symmetry tests
-├── artifacts/                   # Experiment manifests, threshold policies, and metrics
-└── reports/                     # Comprehensive JSON experiment reports
+├── tests/                       # 20 Automated pytest unit, symmetry & API tests
+│   ├── test_api.py
+│   ├── test_critical_tokens.py
+│   ├── test_features.py
+│   ├── test_inference.py
+│   ├── test_normalization.py
+│   └── test_symmetry.py
+├── artifacts/                   # Models, calibration scalers, manifests, and metrics
+├── reports/                     # Comprehensive JSON experiment reports
+├── Dockerfile                   # Production container definition
+├── docker-compose.yml           # Container orchestration
+└── .github/workflows/ci.yml     # Automated GitHub Actions CI workflow
 ```

@@ -1,0 +1,285 @@
+{
+  "overall_accuracy": 0.75,
+  "total_test_pairs": 20,
+  "total_correct": 15,
+  "category_breakdown": {
+    "entity_substitution": {
+      "total": 4,
+      "accuracy": 1.0,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    "numeric_year_shift": {
+      "total": 4,
+      "accuracy": 1.0,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    "negation_flip": {
+      "total": 3,
+      "accuracy": 0.6667,
+      "false_positives": 1,
+      "false_negatives": 0
+    },
+    "intent_shift": {
+      "total": 3,
+      "accuracy": 1.0,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    "tool_substitution": {
+      "total": 2,
+      "accuracy": 1.0,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    "paraphrase_duplicate": {
+      "total": 4,
+      "accuracy": 0.0,
+      "false_positives": 0,
+      "false_negatives": 4
+    }
+  },
+  "detailed_results": [
+    {
+      "category": "entity_substitution",
+      "question1": "What is the average placement package at IIT Delhi?",
+      "question2": "What is the average placement package at IIT Bombay?",
+      "expected_label": 0,
+      "model_score": 0.5388,
+      "decision": "NEEDS_REVIEW",
+      "confidence": "MODERATE",
+      "contradiction_warning": true,
+      "is_correct": true,
+      "description": "Institution name substitution with identical structure"
+    },
+    {
+      "category": "entity_substitution",
+      "question1": "How do I prepare for Google software engineering interview?",
+      "question2": "How do I prepare for Microsoft software engineering interview?",
+      "expected_label": 0,
+      "model_score": 0.1419,
+      "decision": "DISTINCT",
+      "confidence": "HIGH",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Company name substitution with identical intent"
+    },
+    {
+      "category": "entity_substitution",
+      "question1": "What is the best way to travel from Paris to London?",
+      "question2": "What is the best way to travel from Paris to Berlin?",
+      "expected_label": 0,
+      "model_score": 0.02,
+      "decision": "DISTINCT",
+      "confidence": "HIGH",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Destination substitution with identical grammar"
+    },
+    {
+      "category": "entity_substitution",
+      "question1": "Who is the CEO of Apple Inc?",
+      "question2": "Who is the CEO of Tesla Inc?",
+      "expected_label": 0,
+      "model_score": 0.1326,
+      "decision": "DISTINCT",
+      "confidence": "HIGH",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Entity swap in factual inquiry"
+    },
+    {
+      "category": "numeric_year_shift",
+      "question1": "What was the JEE Advanced cutoff rank in 2017?",
+      "question2": "What was the JEE Advanced cutoff rank in 2018?",
+      "expected_label": 0,
+      "model_score": 0.5296,
+      "decision": "NEEDS_REVIEW",
+      "confidence": "MODERATE",
+      "contradiction_warning": true,
+      "is_correct": true,
+      "description": "Year token shift in cutoff query"
+    },
+    {
+      "category": "numeric_year_shift",
+      "question1": "How can a student score 50% in 12th board exams?",
+      "question2": "How can a student score 90% in 12th board exams?",
+      "expected_label": 0,
+      "model_score": 0.3965,
+      "decision": "DISTINCT",
+      "confidence": "MODERATE",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Target percentage mismatch with different target difficulty"
+    },
+    {
+      "category": "numeric_year_shift",
+      "question1": "What are the specs of iPhone 14 Pro?",
+      "question2": "What are the specs of iPhone 15 Pro?",
+      "expected_label": 0,
+      "model_score": 0.4996,
+      "decision": "DISTINCT",
+      "confidence": "MODERATE",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Product version number mismatch"
+    },
+    {
+      "category": "numeric_year_shift",
+      "question1": "How long does it take to run 5 km for beginners?",
+      "question2": "How long does it take to run 10 km for beginners?",
+      "expected_label": 0,
+      "model_score": 0.3742,
+      "decision": "DISTINCT",
+      "confidence": "MODERATE",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Distance metric mismatch"
+    },
+    {
+      "category": "negation_flip",
+      "question1": "Why should I learn Python programming language?",
+      "question2": "Why shouldn't I learn Python programming language?",
+      "expected_label": 0,
+      "model_score": 0.624,
+      "decision": "NEEDS_REVIEW",
+      "confidence": "MODERATE",
+      "contradiction_warning": true,
+      "is_correct": true,
+      "description": "Negation modifier changing core premise"
+    },
+    {
+      "category": "negation_flip",
+      "question1": "How can I invest in the stock market safely?",
+      "question2": "How can I avoid investing in the stock market?",
+      "expected_label": 0,
+      "model_score": 0.4197,
+      "decision": "DISTINCT",
+      "confidence": "MODERATE",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Polarity and action inversion"
+    },
+    {
+      "category": "negation_flip",
+      "question1": "Is drinking green tea good for health?",
+      "question2": "Is drinking green tea bad for health?",
+      "expected_label": 0,
+      "model_score": 0.832,
+      "decision": "DUPLICATE",
+      "confidence": "HIGH",
+      "contradiction_warning": false,
+      "is_correct": false,
+      "description": "Antonym / polarity swap"
+    },
+    {
+      "category": "intent_shift",
+      "question1": "What is machine learning?",
+      "question2": "How can I get a job as a machine learning engineer?",
+      "expected_label": 0,
+      "model_score": 0.0059,
+      "decision": "DISTINCT",
+      "confidence": "HIGH",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Definition vs Career path for identical topic"
+    },
+    {
+      "category": "intent_shift",
+      "question1": "What are the side effects of aspirin?",
+      "question2": "Where can I buy aspirin online without prescription?",
+      "expected_label": 0,
+      "model_score": 0.0002,
+      "decision": "DISTINCT",
+      "confidence": "HIGH",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Medical side-effect query vs purchasing query"
+    },
+    {
+      "category": "intent_shift",
+      "question1": "How does an airplane fly?",
+      "question2": "How much does a commercial airplane cost?",
+      "expected_label": 0,
+      "model_score": 0.0512,
+      "decision": "DISTINCT",
+      "confidence": "HIGH",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Physics mechanism vs financial cost query"
+    },
+    {
+      "category": "tool_substitution",
+      "question1": "How to write a simple HTTP web server in C?",
+      "question2": "How to write a simple HTTP web server in C++?",
+      "expected_label": 0,
+      "model_score": 0.0469,
+      "decision": "DISTINCT",
+      "confidence": "HIGH",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "C vs C++ language distinction"
+    },
+    {
+      "category": "tool_substitution",
+      "question1": "How do I build a REST API in Django?",
+      "question2": "How do I build a REST API in FastAPI?",
+      "expected_label": 0,
+      "model_score": 0.0112,
+      "decision": "DISTINCT",
+      "confidence": "HIGH",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Framework substitution for identical task"
+    },
+    {
+      "category": "paraphrase_duplicate",
+      "question1": "What is the most effective technique to shed excess body weight?",
+      "question2": "How can someone slim down and burn fat rapidly?",
+      "expected_label": 1,
+      "model_score": 0.0001,
+      "decision": "DISTINCT",
+      "confidence": "HIGH",
+      "contradiction_warning": false,
+      "is_correct": false,
+      "description": "True duplicate paraphrase with zero content-word overlap"
+    },
+    {
+      "category": "paraphrase_duplicate",
+      "question1": "What is the salary of an entry level software developer in India?",
+      "question2": "How much does a fresher programmer get paid in India?",
+      "expected_label": 1,
+      "model_score": 0.2435,
+      "decision": "DISTINCT",
+      "confidence": "MODERATE",
+      "contradiction_warning": false,
+      "is_correct": false,
+      "description": "Synonym-heavy true duplicate"
+    },
+    {
+      "category": "paraphrase_duplicate",
+      "question1": "What causes thunderstorms and lightning during monsoon?",
+      "question2": "Why do lightning and thunder occur in rainy season?",
+      "expected_label": 1,
+      "model_score": 0.6131,
+      "decision": "NEEDS_REVIEW",
+      "confidence": "MODERATE",
+      "contradiction_warning": false,
+      "is_correct": false,
+      "description": "Paraphrased scientific question"
+    },
+    {
+      "category": "paraphrase_duplicate",
+      "question1": "What should I do if I lost my passport in a foreign country?",
+      "question2": "How to get emergency travel documents when your passport is stolen abroad?",
+      "expected_label": 1,
+      "model_score": 0.0013,
+      "decision": "DISTINCT",
+      "confidence": "HIGH",
+      "contradiction_warning": false,
+      "is_correct": false,
+      "description": "Complex situation paraphrase"
+    }
+  ]
+}
