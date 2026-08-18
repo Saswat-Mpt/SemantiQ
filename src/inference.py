@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import time
-from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -31,7 +30,7 @@ class SemantIQ:
       - 19-feature fusion vector extraction (Champion Model E)
       - Cost-aware 3-tier decision policy (DUPLICATE / NEEDS_REVIEW / DISTINCT)
       - Critical token contradiction & mismatch diagnostics
-      - LRU query embedding cache for fast repeated query lookups
+      - In-memory query embedding cache for fast repeated query lookups
       - Vectorized high-throughput batch prediction
       - Latency tracking & decision evidence
     """
@@ -60,7 +59,7 @@ class SemantIQ:
             groups = json.load(f)
         self.feature_columns = groups["experiments"]["E"]
 
-        # In-memory query embedding cache (LRU)
+        # In-memory query embedding cache
         self._embedding_cache: dict[str, np.ndarray] = {}
 
     def _get_embedding(self, text: str) -> np.ndarray:
@@ -115,7 +114,7 @@ class SemantIQ:
     def predict_pair(self, question1: str, question2: str) -> dict[str, Any]:
         """
         Executes end-to-end inference on a single question pair.
-        Returns 3-tier cost-aware decision, model score, and explanatory evidence.
+        Returns 3-tier cost-aware decision, raw model score, and explanatory evidence.
         """
         start_time = time.perf_counter()
 
@@ -131,7 +130,7 @@ class SemantIQ:
         features_dict = self.extract_features(q1, q2)
         features_df = pd.DataFrame([[features_dict[name] for name in self.feature_columns]], columns=self.feature_columns)
 
-        # Predict model score (P in [0, 1])
+        # Predict raw model score (P in [0, 1])
         model_score = float(self.model.predict_proba(features_df)[0, 1])
 
         # Critical token contradictions check

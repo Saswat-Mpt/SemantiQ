@@ -17,7 +17,7 @@
                                               │
                     ┌─────────────────────────┴─────────────────────────┐
                     ▼                                                   ▼
-      19-Feature Fusion Pipeline (Model E)                    Critical-Token Diagnostics
+       19-Feature Hybrid Pipeline                             Critical-Token Engine
                     │                                                   │
   ├── Statistical (8)  [Lengths, word counts, ratios]      ├── Numeric/Year mismatch (e.g., 2017 vs 2018)
   ├── Lexical (8)      [Jaccard, RapidFuzz, n-grams]       ├── Entity mismatch (e.g., IITD vs IITG)
@@ -42,6 +42,10 @@
       High-Confidence Merge         Human Review Required        Independent Queries
 ```
 
+* **Production Deployed Champion:** **Experiment E (19 Features)**.
+* **Experimental Extension (Phase 8):** Model F (24 Features with embedded contradiction signals) achieves +0.0051 PR-AUC (0.8404); Model E is retained as the deployed champion for architectural simplicity.
+* **Probability Calibration Study:** Evaluated raw XGBoost vs Platt Scaling and Isotonic Regression. Raw XGBoost achieved the best calibration (Brier = 0.1172, ECE = 1.20%), so raw probabilities are retained.
+
 ---
 
 ## 2. Controlled Experimental Ablation (A → E)
@@ -60,7 +64,6 @@ All experiments were trained on the **identical Phase 1 partition** (198,394 tra
 ### Key Experimental Insights:
 1. **Semantic Dominance:** Adding a single dense semantic representation (`minilm_cosine`) to simple statistics (**D vs A**) increases test PR-AUC by **+0.1819**, outperforming the entire 18-feature classical stack (**C**) by **+0.0860**.
 2. **Complementary Fusion:** Combining all classical features with MiniLM (**E vs D**) provides an additional **+0.0238 PR-AUC** gain.
-3. **Production Deployment Choice:** While experimental **Model F** slightly improves PR-AUC (+0.0051), **Model E (19 features)** is selected as the primary production champion for architectural simplicity, maintaining contradiction diagnostics as a verification layer.
 
 ---
 
@@ -78,41 +81,30 @@ In deduplication systems, false merges corrupt search indices and knowledge grap
 | **Default ($T = 0.50$)** | 75.81% [74.5% – 77.1%] | 80.52% [79.2% – 81.8%] | 0.7809 | **0.8353 [0.8223 – 0.8474]** |
 | **Cost-Aware ($T^* = 0.8034$)** | **88.08% [86.33% – 89.56%]** | **40.27% [38.51% – 41.99%]** | **0.5527** | **0.8353 [0.8223 – 0.8474]** |
 
-> *Evaluation Transparency:* When $T^*$ is selected on validation to target $90\%$ precision, it achieves **88.08% precision on the untouched test set** (1,389 verified duplicates captured), vs the naive string baseline which collapsed to $0.23\%$ recall (3 pairs).
+> *Evaluation Transparency:* A 90% validation precision operating point was selected without using the test set; it achieved **88.08% precision on the held-out test set** (1,389 verified duplicates captured), vs the naive string baseline which collapsed to $0.23\%$ recall (3 pairs).
 
 ---
 
-## 4. Probability Calibration Analysis
+## 4. Curated Adversarial Stress Test
 
-Evaluated on held-out test data:
-* **Raw XGBoost Classifier:** Brier Score = `0.11720`, Expected Calibration Error (ECE) = **`0.01202` (1.20%)**.
-* **Platt Scaling (Sigmoid):** Brier Score = `0.12004`, ECE = `0.03926`.
-* **Isotonic Regression:** Brier Score = `0.11774`, ECE = `0.01549`.
+Evaluated against the curated adversarial challenge suite (`src/adversarial_suite.py`):
 
-*Raw XGBoost tree probabilities demonstrated the lowest Brier error and calibration error, so uncalibrated raw model probabilities are retained for production inference.*
+| Challenge Category | Example Test Pair | Total ($N$) | Correct | False Positives | False Negatives |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| **Entity Substitutions** | *"Placement package at IIT Delhi"* vs *"IIT Bombay"* | 8 | **8 / 8 (100%)** | **0** | 0 |
+| **Numeric & Year Shifts** | *"JEE cutoff in 2017"* vs *"2018"*, *"50% vs 90%"* | 8 | **8 / 8 (100%)** | **0** | 0 |
+| **Intent / Career Shifts** | *"What is ML"* vs *"How to get an ML engineer job"* | 7 | **7 / 7 (100%)** | **0** | 0 |
+| **Tool / Language Shifts** | *"Web server in C"* vs *"Web server in C++"* | 6 | **6 / 6 (100%)** | **0** | 0 |
+| **Negation Inversions** | *"Why learn Python"* vs *"Why shouldn't I learn Python"* | 7 | **6 / 7 (85.7%)** | **1** | 0 |
+| **Paraphrase Duplicates** | *"Shed excess body weight"* vs *"Slim down rapidly"* | 12 | **1 / 12 (8.3%)** | 0 | **11** |
 
----
-
-## 5. Curated Adversarial Benchmark Breakdown
-
-Evaluated against the 48-pair curated adversarial challenge suite (`src/adversarial_suite.py`):
-
-| Challenge Category | Example Test Pair | Total | Correct | Accuracy | False Positives | False Negatives |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Entity Substitutions** | *"Placement package at IIT Delhi"* vs *"IIT Bombay"* | 8 | 8 | **100.0%** | **0** | 0 |
-| **Numeric & Year Shifts** | *"JEE cutoff in 2017"* vs *"2018"*, *"50% vs 90%"* | 8 | 8 | **100.0%** | **0** | 0 |
-| **Intent / Career Shifts** | *"What is ML"* vs *"How to get an ML engineer job"* | 7 | 7 | **100.0%** | **0** | 0 |
-| **Tool / Language Shifts** | *"Web server in C"* vs *"Web server in C++"* | 6 | 6 | **100.0%** | **0** | 0 |
-| **Negation Inversions** | *"Why learn Python"* vs *"Why shouldn't I learn Python"* | 7 | 6 | **85.7%** | **1** | 0 |
-| **Paraphrase Duplicates** | *"Shed excess body weight"* vs *"Slim down rapidly"* | 12 | 1 | **8.3%** | 0 | **11** |
-
-### Scientific Finding on Model Strengths & Weaknesses:
-* **Strengths:** Under strict precision thresholding ($T^* = 0.8034$), SemantIQ provides near-perfect protection (**0% False Positive Rate**) against entity swaps, numeric differences, tool substitutions, and intent shifts.
-* **Weaknesses:** Because high precision requires conservative thresholding, extreme zero-overlap paraphrases are flagged as `NEEDS_REVIEW` or `DISTINCT` rather than auto-merged. This demonstrates why the 3-tier policy is essential for human-in-the-loop review.
+### Scientific Findings on Model Behavior:
+* **Robustness:** Under conservative cost-aware thresholding ($T^* = 0.8034$), SemantiQ provides **0% False Positive Rate** on entity swaps, numeric differences, tool substitutions, and intent shifts.
+* **Open Limitation:** Highly lexical-diverse paraphrases with zero shared content words are flagged as `NEEDS_REVIEW` / `DISTINCT` under strict precision mode. This validates the necessity of the 3-tier review policy.
 
 ---
 
-## 6. Quickstart & Usage
+## 5. Quickstart & Usage
 
 ### Installation
 ```bash
@@ -123,7 +115,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### Python API (with LRU Embedding Cache & Batch Vectorization)
+### Python API (with In-Memory Embedding Cache & Batch Vectorization)
 ```python
 from src.inference import SemantIQ
 
@@ -135,7 +127,7 @@ result = detector.predict_pair(
     "What is the best way to study Python for data analysis?"
 )
 print(result["decision"])              # DUPLICATE / NEEDS_REVIEW / DISTINCT
-print(result["score"])                 # 0.7789
+print(result["score"])                 # e.g., 0.7789
 print(result["decision_band"])         # HUMAN_REVIEW_REQUIRED
 print(result["contradiction_warning"]) # False
 
@@ -178,7 +170,7 @@ python scripts/run_all.py
 
 ---
 
-## 7. Repository Structure
+## 6. Repository Structure
 
 ```text
 SemantiQ/
@@ -194,8 +186,8 @@ SemantiQ/
 │   ├── phase7_analysis.py       # Error taxonomy and failure analysis
 │   ├── phase8_enhanced_verification.py # Model F, calibration & bootstrap CIs
 │   ├── critical_tokens.py       # Contradiction & information-changing token engine
-│   ├── adversarial_suite.py     # 48-Pair curated adversarial evaluation benchmark
-│   └── inference.py             # Unified inference engine with LRU cache & batching
+│   ├── adversarial_suite.py     # Curated adversarial stress test
+│   └── inference.py             # Unified inference engine with embedding cache & batching
 ├── scripts/
 │   ├── run_all.py               # Master one-click reproducibility runner
 │   ├── run_phase8.py            # Phase 8 calibration & Model F runner
