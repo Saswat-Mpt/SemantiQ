@@ -1,0 +1,41 @@
+{
+  "system_name": "SemantIQ",
+  "version": "1.0.0",
+  "random_seed": 42,
+  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "classifier": {
+    "type": "XGBClassifier",
+    "n_estimators": 300,
+    "max_depth": 6,
+    "learning_rate": 0.05,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "tree_method": "hist"
+  },
+  "dataset_partitions": {
+    "train_pairs": 198394,
+    "validation_pairs": 9132,
+    "test_pairs": 9178,
+    "duplicate_rates": {
+      "train": 0.370,
+      "validation": 0.384,
+      "test": 0.376
+    }
+  },
+  "feature_dimensions": 19,
+  "ablation_results_test_pr_auc": {
+    "Exp_A_Statistical": 0.6296,
+    "Exp_B_Lexical_String": 0.7037,
+    "Exp_C_TFIDF": 0.7255,
+    "Exp_D_MiniLM": 0.8115,
+    "Exp_E_Full_Fusion": 0.8353
+  },
+  "decision_policy": {
+    "validation_target_precision": 0.90,
+    "selected_threshold_T_star": 0.80343205,
+    "held_out_test_precision": 0.8808,
+    "held_out_test_recall": 0.4027,
+    "held_out_test_f1": 0.5527,
+    "held_out_test_pr_auc": 0.8353
+  }
+}

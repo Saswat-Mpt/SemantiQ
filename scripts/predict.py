@@ -3,27 +3,27 @@ from src.inference import SemantIQ
 
 
 def main() -> None:
+    engine = SemantIQ()
 
-    model = SemantIQ()
-
-    print("\n" + "=" * 50)
-    print("SemantIQ — Semantic Deduplication Live CLI")
-    print("=" * 50)
+    print("\n" + "=" * 60)
+    print("SemantIQ — Semantic Deduplication & Verification CLI")
+    print(f"Policy: High Precision (T* = {engine.high_precision_threshold:.4f}) | Default (T = {engine.default_threshold:.2f})")
+    print("=" * 60)
     print("Type 'exit' to quit.\n")
 
-    # If arguments are passed via CLI directly, run single test
     if len(sys.argv) == 3:
         q1 = sys.argv[1]
         q2 = sys.argv[2]
-        res = model.predict_pair(q1, q2)
+        res = engine.predict_pair(q1, q2)
         print(f"Q1: {q1}")
         print(f"Q2: {q2}")
-        print(f"Decision:    {res['decision']}")
-        print(f"Probability: {res['duplicate_probability']:.4f} (Threshold = {res['threshold']:.4f})")
-        print(f"MiniLM Cos:  {res['semantic_similarity']:.4f}")
+        print(f"Decision:              {res['decision']} (Confidence: {res['confidence']})")
+        print(f"Duplicate Score:       {res['score']:.4f}")
+        print(f"Contradiction Warning: {res['contradiction_warning']}")
+        print(f"MiniLM Semantic Cos:   {res['evidence']['semantic_similarity_minilm']:.4f}")
+        print(f"Word TF-IDF Cos:       {res['evidence']['word_tfidf_similarity']:.4f}")
         return
 
-    # Interactive loop
     while True:
         try:
             question1 = input("Question 1: ").strip()
@@ -34,16 +34,21 @@ def main() -> None:
             if question2.lower() == "exit" or not question2:
                 break
 
-            result = model.predict_pair(question1, question2)
+            res = engine.predict_pair(question1, question2)
 
-            print("\n" + "-" * 40)
-            print(f"Decision:             {result['decision']}")
-            print(f"Duplicate Probability: {result['duplicate_probability']:.4f}")
-            print(f"Operating Threshold:   {result['threshold']:.4f}")
-            print(f"MiniLM Cosine:         {result['semantic_similarity']:.4f}")
-            print(f"Word TF-IDF Cosine:    {result['features']['word_tfidf_cosine']:.4f}")
-            print(f"Fuzzy Token Set Ratio: {result['features']['token_set_ratio']:.4f}")
-            print("-" * 40 + "\n")
+            print("\n" + "-" * 50)
+            print(f"Decision:              {res['decision']} ({res['confidence']} confidence)")
+            print(f"Duplicate Score:       {res['score']:.4f}")
+            print(f"Contradiction Warning: {res['contradiction_warning']}")
+            if res['contradiction_warning']:
+                print(f"  [ALERT] Potential entity, numeric, or negation mismatch detected!")
+            print(f"Evidence:")
+            print(f"  - MiniLM Semantic Cosine: {res['evidence']['semantic_similarity_minilm']:.4f}")
+            print(f"  - Word TF-IDF Cosine:     {res['evidence']['word_tfidf_similarity']:.4f}")
+            print(f"  - Char TF-IDF Cosine:     {res['evidence']['char_tfidf_similarity']:.4f}")
+            print(f"  - Fuzzy Token Set Ratio:  {res['evidence']['fuzzy_token_set_ratio']:.4f}")
+            print(f"Latency:               {res['latency_ms']:.2f} ms")
+            print("-" * 50 + "\n")
 
         except KeyboardInterrupt:
             break

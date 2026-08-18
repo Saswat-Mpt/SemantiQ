@@ -1,0 +1,28 @@
+{
+  "overall": {
+    "total_test_pairs": 9178,
+    "total_duplicates": 3449,
+    "total_false_positives": 188,
+    "total_false_negatives": 2060
+  },
+  "error_rates_by_category": {
+    "numeric_mismatch": {
+      "pair_count": 966,
+      "false_positive_rate": 0.016563146997929608,
+      "precision": 0.6595744680851063
+    },
+    "entity_mismatch": {
+      "pair_count": 4361,
+      "false_positive_rate": 0.01238248108232057,
+      "precision": 0.859375
+    },
+    "negation_mismatch": {
+      "pair_count": 720,
+      "false_positive_rate": 0.019444444444444445
+    },
+    "question_type_mismatch": {
+      "pair_count": 2754,
+      "false_positive_rate": 0.007988380537400145
+    }
+  }
+}
