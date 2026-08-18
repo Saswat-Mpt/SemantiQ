@@ -19,15 +19,15 @@ env/
 .DS_Store
 Thumbs.db
 
-# Large Data & Datasets
+# Raw & Processed Heavy Datasets
 data/raw/*
 data/processed/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 
-# Large Generated Feature CSVs (Keep metadata JSONs)
+# Large Generated Feature Matrix CSVs (keep JSONs and lightweight joblib models)
 artifacts/*/*.csv
-artifacts/*/*.joblib
 
-# Logs
+# Logs & Cache
 *.log
+.pytest_cache/
