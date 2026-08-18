@@ -27,7 +27,7 @@ SemantIQ is an NLP system for detecting semantically duplicate question pairs an
            XGBoost Classifier (Exp E)         Rule-Based Diagnostics
                     │                                 │
                     ▼                                 │
-             Model Score P ∈ [0, 1]                   │
+         XGBoost Model Score ∈ [0, 1]                 │
                     │                                 │
                     └────────────────┬────────────────┘
                                      │
@@ -42,7 +42,7 @@ SemantIQ is an NLP system for detecting semantically duplicate question pairs an
 
 * **Deployed Model:** **Experiment E (19 features)**.
 * **Experimental Extension (Phase 8):** Model F (24 features with embedded contradiction signals) achieves +0.0051 PR-AUC (0.8404); Model E is kept as the deployed model for simplicity.
-* **Probability Calibration:** Evaluated raw XGBoost vs Platt scaling and isotonic regression. Raw XGBoost gave the lowest Brier score (0.1172) and lowest expected calibration error (1.20%), so raw probabilities are used directly.
+* **Probability Calibration Study:** Evaluated raw XGBoost vs Platt scaling and isotonic regression. Raw XGBoost gave the lowest Brier score (0.1172) and lowest expected calibration error (1.20%), so raw XGBoost model scores are used directly without post-hoc transforms.
 
 ---
 
@@ -125,7 +125,7 @@ result = detector.predict_pair(
     "What is the best way to study Python for data analysis?"
 )
 print(result["decision"])      # DUPLICATE / NEEDS_REVIEW / DISTINCT
-print(result["score"])         # 0.7789
+print(result["score"])         # 0.7789 (XGBoost model score)
 print(result["decision_band"]) # HUMAN_REVIEW_REQUIRED
 
 # Batch prediction

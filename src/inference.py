@@ -31,7 +31,7 @@ class SemantIQ:
       - Cost-aware 3-tier decision policy (DUPLICATE / NEEDS_REVIEW / DISTINCT)
       - Critical token contradiction & mismatch diagnostics
       - In-memory query embedding cache for fast repeated query lookups
-      - Vectorized high-throughput batch prediction
+      - Vectorized batch prediction
       - Latency tracking & decision evidence
     """
 
@@ -114,7 +114,7 @@ class SemantIQ:
     def predict_pair(self, question1: str, question2: str) -> dict[str, Any]:
         """
         Executes end-to-end inference on a single question pair.
-        Returns 3-tier cost-aware decision, raw model score, and explanatory evidence.
+        Returns 3-tier cost-aware decision, raw XGBoost model score, and explanatory evidence.
         """
         start_time = time.perf_counter()
 
@@ -130,7 +130,7 @@ class SemantIQ:
         features_dict = self.extract_features(q1, q2)
         features_df = pd.DataFrame([[features_dict[name] for name in self.feature_columns]], columns=self.feature_columns)
 
-        # Predict raw model score (P in [0, 1])
+        # Predict raw XGBoost model score (in [0, 1])
         model_score = float(self.model.predict_proba(features_df)[0, 1])
 
         # Critical token contradictions check
@@ -188,7 +188,7 @@ class SemantIQ:
 
     def predict_batch(self, pairs: list[tuple[str, str]]) -> list[dict[str, Any]]:
         """
-        True vectorized batch prediction for high-throughput pipelines.
+        Vectorized batch prediction for high-throughput pipelines.
         Batch transforms TF-IDF and batch encodes MiniLM embeddings.
         """
         if not pairs:
@@ -216,6 +216,7 @@ class SemantIQ:
         unique_texts = list(set(q1_clean + q2_clean))
         uncached = [t for t in unique_texts if t not in self._embedding_cache]
         
+        batch_embeddings: dict[str, np.ndarray] = {}
         if uncached:
             embeddings = self.embedding_model.encode(
                 uncached,
@@ -225,13 +226,19 @@ class SemantIQ:
                 batch_size=64,
             )
             for text, emb in zip(uncached, embeddings):
+                batch_embeddings[text] = emb
                 if len(self._embedding_cache) < 10000:
                     self._embedding_cache[text] = emb
 
+        def get_batch_embedding(text: str) -> np.ndarray:
+            if text in self._embedding_cache:
+                return self._embedding_cache[text]
+            return batch_embeddings[text]
+
         minilm_cosines = np.empty(n, dtype=np.float32)
         for i in range(n):
-            emb1 = self._embedding_cache[q1_clean[i]]
-            emb2 = self._embedding_cache[q2_clean[i]]
+            emb1 = get_batch_embedding(q1_clean[i])
+            emb2 = get_batch_embedding(q2_clean[i])
             minilm_cosines[i] = float(np.dot(emb1, emb2))
 
         # 3. Batch Classical Features & Combine
