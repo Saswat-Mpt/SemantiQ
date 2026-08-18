@@ -1,0 +1,10 @@
+{
+  "data": "validation_only",
+  "selected_threshold": 0.803432047367096,
+  "validation_precision": 0.9001272264631043,
+  "validation_recall": 0.4031339031339031,
+  "validation_f1": 0.5568673750491933,
+  "true_positive": 1415,
+  "false_positive": 157,
+  "false_negative": 2095
+}

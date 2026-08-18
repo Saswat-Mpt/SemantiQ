@@ -1,0 +1,48 @@
+{
+  "method": "logistic_regression",
+  "threshold": 0.5,
+  "features": [
+    "q1_char_length",
+    "q2_char_length",
+    "q1_word_count",
+    "q2_word_count",
+    "length_difference",
+    "length_ratio",
+    "common_word_count",
+    "common_word_ratio"
+  ],
+  "validation_metrics": {
+    "accuracy": 0.6527595269382391,
+    "precision": 0.5628942486085343,
+    "recall": 0.4321937321937322,
+    "f1": 0.4889605157131346,
+    "confusion_matrix": [
+      [
+        4444,
+        1178
+      ],
+      [
+        1993,
+        1517
+      ]
+    ],
+    "pr_auc": 0.5391104547730061
+  },
+  "test_metrics": {
+    "accuracy": 0.6497058182610591,
+    "precision": 0.5430780559646539,
+    "recall": 0.4276601913598144,
+    "f1": 0.47850770478507704,
+    "confusion_matrix": [
+      [
+        4488,
+        1241
+      ],
+      [
+        1974,
+        1475
+      ]
+    ],
+    "pr_auc": 0.5167003488430404
+  }
+}

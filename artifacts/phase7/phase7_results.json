@@ -1,0 +1,42 @@
+{
+  "phase": "phase7",
+  "final_model": "Experiment E",
+  "feature_count": 19,
+  "features": [
+    "q1_char_length",
+    "q2_char_length",
+    "q1_word_count",
+    "q2_word_count",
+    "length_difference",
+    "length_ratio",
+    "common_word_count",
+    "common_word_ratio",
+    "jaccard_similarity",
+    "fuzzy_ratio",
+    "token_sort_ratio",
+    "token_set_ratio",
+    "char_bigram_jaccard",
+    "char_trigram_jaccard",
+    "word_bigram_overlap",
+    "word_trigram_overlap",
+    "word_tfidf_cosine",
+    "char_tfidf_cosine",
+    "minilm_cosine"
+  ],
+  "error_summary": {
+    "total_examples": 9178,
+    "true_positive": 1389,
+    "true_negative": 5541,
+    "false_positive": 188,
+    "false_negative": 2060,
+    "error_rate": 0.24493353671823928
+  },
+  "artifacts": {
+    "false_positives": "false_positives.csv",
+    "false_negatives": "false_negatives.csv",
+    "high_lexical_low_semantic": "high_lexical_low_semantic.csv",
+    "low_lexical_high_semantic": "low_lexical_high_semantic.csv",
+    "feature_importance": "feature_importance.csv",
+    "final_test_analysis": "final_test_analysis.csv"
+  }
+}

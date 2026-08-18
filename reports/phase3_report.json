@@ -1,0 +1,58 @@
+{
+  "model": "logistic_regression",
+  "feature_set": "phase3_classical_similarity",
+  "num_features": 16,
+  "threshold": 0.5,
+  "features": [
+    "q1_char_length",
+    "q2_char_length",
+    "q1_word_count",
+    "q2_word_count",
+    "length_difference",
+    "length_ratio",
+    "common_word_count",
+    "common_word_ratio",
+    "jaccard_similarity",
+    "fuzzy_ratio",
+    "token_sort_ratio",
+    "token_set_ratio",
+    "char_bigram_jaccard",
+    "char_trigram_jaccard",
+    "word_bigram_overlap",
+    "word_trigram_overlap"
+  ],
+  "validation": {
+    "accuracy": 0.6980946123521682,
+    "precision": 0.6182846371347785,
+    "recall": 0.5606837606837607,
+    "f1": 0.5880770954728821,
+    "pr_auc": 0.6253722685599528,
+    "confusion_matrix": [
+      [
+        4407,
+        1215
+      ],
+      [
+        1542,
+        1968
+      ]
+    ]
+  },
+  "test": {
+    "accuracy": 0.6926345609065155,
+    "precision": 0.5995561192136969,
+    "recall": 0.5482748622789214,
+    "f1": 0.5727699530516432,
+    "pr_auc": 0.6086506773425089,
+    "confusion_matrix": [
+      [
+        4466,
+        1263
+      ],
+      [
+        1558,
+        1891
+      ]
+    ]
+  }
+}

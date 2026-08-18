@@ -1,0 +1,5 @@
+[
+  "word_tfidf_cosine",
+  "char_tfidf_cosine",
+  "minilm_cosine"
+]

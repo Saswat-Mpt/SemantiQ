@@ -1,0 +1,132 @@
+{
+  "statistical": [
+    "q1_char_length",
+    "q2_char_length",
+    "q1_word_count",
+    "q2_word_count",
+    "length_difference",
+    "length_ratio",
+    "common_word_count",
+    "common_word_ratio"
+  ],
+  "string": [
+    "jaccard_similarity",
+    "fuzzy_ratio",
+    "token_sort_ratio",
+    "token_set_ratio",
+    "char_bigram_jaccard",
+    "char_trigram_jaccard",
+    "word_bigram_overlap",
+    "word_trigram_overlap"
+  ],
+  "tfidf": [
+    "word_tfidf_cosine",
+    "char_tfidf_cosine"
+  ],
+  "semantic": [
+    "minilm_cosine"
+  ],
+  "all": [
+    "q1_char_length",
+    "q2_char_length",
+    "q1_word_count",
+    "q2_word_count",
+    "length_difference",
+    "length_ratio",
+    "common_word_count",
+    "common_word_ratio",
+    "jaccard_similarity",
+    "fuzzy_ratio",
+    "token_sort_ratio",
+    "token_set_ratio",
+    "char_bigram_jaccard",
+    "char_trigram_jaccard",
+    "word_bigram_overlap",
+    "word_trigram_overlap",
+    "word_tfidf_cosine",
+    "char_tfidf_cosine",
+    "minilm_cosine"
+  ],
+  "experiments": {
+    "A": [
+      "q1_char_length",
+      "q2_char_length",
+      "q1_word_count",
+      "q2_word_count",
+      "length_difference",
+      "length_ratio",
+      "common_word_count",
+      "common_word_ratio"
+    ],
+    "B": [
+      "q1_char_length",
+      "q2_char_length",
+      "q1_word_count",
+      "q2_word_count",
+      "length_difference",
+      "length_ratio",
+      "common_word_count",
+      "common_word_ratio",
+      "jaccard_similarity",
+      "fuzzy_ratio",
+      "token_sort_ratio",
+      "token_set_ratio",
+      "char_bigram_jaccard",
+      "char_trigram_jaccard",
+      "word_bigram_overlap",
+      "word_trigram_overlap"
+    ],
+    "C": [
+      "q1_char_length",
+      "q2_char_length",
+      "q1_word_count",
+      "q2_word_count",
+      "length_difference",
+      "length_ratio",
+      "common_word_count",
+      "common_word_ratio",
+      "jaccard_similarity",
+      "fuzzy_ratio",
+      "token_sort_ratio",
+      "token_set_ratio",
+      "char_bigram_jaccard",
+      "char_trigram_jaccard",
+      "word_bigram_overlap",
+      "word_trigram_overlap",
+      "word_tfidf_cosine",
+      "char_tfidf_cosine"
+    ],
+    "D": [
+      "q1_char_length",
+      "q2_char_length",
+      "q1_word_count",
+      "q2_word_count",
+      "length_difference",
+      "length_ratio",
+      "common_word_count",
+      "common_word_ratio",
+      "minilm_cosine"
+    ],
+    "E": [
+      "q1_char_length",
+      "q2_char_length",
+      "q1_word_count",
+      "q2_word_count",
+      "length_difference",
+      "length_ratio",
+      "common_word_count",
+      "common_word_ratio",
+      "jaccard_similarity",
+      "fuzzy_ratio",
+      "token_sort_ratio",
+      "token_set_ratio",
+      "char_bigram_jaccard",
+      "char_trigram_jaccard",
+      "word_bigram_overlap",
+      "word_trigram_overlap",
+      "word_tfidf_cosine",
+      "char_tfidf_cosine",
+      "minilm_cosine"
+    ]
+  }
+}

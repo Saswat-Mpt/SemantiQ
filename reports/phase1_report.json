@@ -1,0 +1,59 @@
+{
+  "project": "SemantiQ",
+  "phase": "phase_1_data_foundation",
+  "random_state": 42,
+  "requested_split_ratios": {
+    "train": 0.7,
+    "validation": 0.15,
+    "test": 0.15
+  },
+  "raw": {
+    "rows": 404290,
+    "columns": [
+      "id",
+      "qid1",
+      "qid2",
+      "question1",
+      "question2",
+      "is_duplicate"
+    ],
+    "null_question_rows_dropped": 3,
+    "empty_after_normalization_rows_dropped": 18,
+    "total_rows_dropped": 21,
+    "rows_after_cleaning": 404269
+  },
+  "questions": {
+    "unique_question_ids": 537905,
+    "unique_normalized_texts": 536143,
+    "duplicate_text_groups": 1623
+  },
+  "splits": {
+    "train": {
+      "pairs": 198394,
+      "duplicate_pairs": 73342,
+      "non_duplicate_pairs": 125052,
+      "duplicate_pct": 36.9679,
+      "unique_questions": 282734,
+      "unique_text_groups": 281710
+    },
+    "validation": {
+      "pairs": 9132,
+      "duplicate_pairs": 3510,
+      "non_duplicate_pairs": 5622,
+      "duplicate_pct": 38.4363,
+      "unique_questions": 16035,
+      "unique_text_groups": 15881
+    },
+    "test": {
+      "pairs": 9178,
+      "duplicate_pairs": 3449,
+      "non_duplicate_pairs": 5729,
+      "duplicate_pct": 37.579,
+      "unique_questions": 16075,
+      "unique_text_groups": 15929
+    },
+    "discarded": {
+      "pairs": 187565
+    }
+  }
+}

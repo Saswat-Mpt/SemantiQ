@@ -1,0 +1,109 @@
+{
+  "phase": "phase4",
+  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "tfidf_config": {
+    "word": {
+      "analyzer": "word",
+      "ngram_range": [
+        1,
+        2
+      ],
+      "min_df": 2,
+      "max_features": 100000,
+      "vocabulary_size": 100000
+    },
+    "character": {
+      "analyzer": "char_wb",
+      "ngram_range": [
+        3,
+        5
+      ],
+      "min_df": 2,
+      "max_features": 100000,
+      "vocabulary_size": 100000
+    }
+  },
+  "features": [
+    "word_tfidf_cosine",
+    "char_tfidf_cosine",
+    "minilm_cosine"
+  ],
+  "train_feature_statistics": {
+    "word_tfidf_cosine": {
+      "mean": 0.3790769577026367,
+      "std": 0.26944127678871155,
+      "min": 0.0,
+      "max": 1.0000001192092896,
+      "median": 0.3353123962879181
+    },
+    "char_tfidf_cosine": {
+      "mean": 0.5101100206375122,
+      "std": 0.2624485194683075,
+      "min": 0.0,
+      "max": 1.0000001192092896,
+      "median": 0.5217643976211548
+    },
+    "minilm_cosine": {
+      "mean": 0.6727017760276794,
+      "std": 0.26757901906967163,
+      "min": -0.1896040141582489,
+      "max": 1.000000238418579,
+      "median": 0.754010796546936
+    }
+  },
+  "train_representation_diagnostics": {
+    "word_tfidf_cosine": {
+      "duplicate_mean": 0.47121405601501465,
+      "non_duplicate_mean": 0.3250392973423004,
+      "mean_gap": 0.146175
+    },
+    "char_tfidf_cosine": {
+      "duplicate_mean": 0.6595353484153748,
+      "non_duplicate_mean": 0.4224732518196106,
+      "mean_gap": 0.237062
+    },
+    "minilm_cosine": {
+      "duplicate_mean": 0.8654788732528687,
+      "non_duplicate_mean": 0.5596396327018738,
+      "mean_gap": 0.305839
+    }
+  },
+  "diagnostic_model": {
+    "model": "logistic_regression",
+    "feature_set": "phase4_representation_only",
+    "note": "Diagnostic only \u2014 not an official ablation result. Formal A-E XGBoost experiment is Phase 5.",
+    "threshold": 0.5,
+    "validation": {
+      "precision": 0.7374209513335166,
+      "recall": 0.764102564102564,
+      "f1": 0.7505246956765076,
+      "pr_auc": 0.7982156735773518,
+      "confusion_matrix": [
+        [
+          4667,
+          955
+        ],
+        [
+          828,
+          2682
+        ]
+      ]
+    },
+    "test": {
+      "precision": 0.7187586589082848,
+      "recall": 0.7521020585677007,
+      "f1": 0.7350524227826579,
+      "pr_auc": 0.7788127533113138,
+      "confusion_matrix": [
+        [
+          4714,
+          1015
+        ],
+        [
+          855,
+          2594
+        ]
+      ]
+    }
+  }
+}

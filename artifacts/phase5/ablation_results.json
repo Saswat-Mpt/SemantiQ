@@ -1,0 +1,332 @@
+{
+  "A": {
+    "experiment": "A",
+    "feature_count": 8,
+    "features": [
+      "q1_char_length",
+      "q2_char_length",
+      "q1_word_count",
+      "q2_word_count",
+      "length_difference",
+      "length_ratio",
+      "common_word_count",
+      "common_word_ratio"
+    ],
+    "model_config": {
+      "type": "XGBClassifier",
+      "n_estimators": 300,
+      "max_depth": 6,
+      "learning_rate": 0.05,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "random_state": 42
+    },
+    "validation": {
+      "threshold": 0.5,
+      "accuracy": 0.7134253175646079,
+      "precision": 0.6119328152419152,
+      "recall": 0.6954415954415955,
+      "f1": 0.6510201360181358,
+      "pr_auc": 0.6539976488259317,
+      "confusion_matrix": [
+        [
+          4074,
+          1548
+        ],
+        [
+          1069,
+          2441
+        ]
+      ]
+    },
+    "test": {
+      "threshold": 0.5,
+      "accuracy": 0.7085421660492482,
+      "precision": 0.5948529411764706,
+      "recall": 0.7036822267323862,
+      "f1": 0.6447071324213043,
+      "pr_auc": 0.6296286029004723,
+      "confusion_matrix": [
+        [
+          4076,
+          1653
+        ],
+        [
+          1022,
+          2427
+        ]
+      ]
+    },
+    "model_path": "C:\\Users\\hp\\Downloads\\NLP Project\\SemantiQ\\artifacts\\phase5\\xgboost_experiment_A.joblib"
+  },
+  "B": {
+    "experiment": "B",
+    "feature_count": 16,
+    "features": [
+      "q1_char_length",
+      "q2_char_length",
+      "q1_word_count",
+      "q2_word_count",
+      "length_difference",
+      "length_ratio",
+      "common_word_count",
+      "common_word_ratio",
+      "jaccard_similarity",
+      "fuzzy_ratio",
+      "token_sort_ratio",
+      "token_set_ratio",
+      "char_bigram_jaccard",
+      "char_trigram_jaccard",
+      "word_bigram_overlap",
+      "word_trigram_overlap"
+    ],
+    "model_config": {
+      "type": "XGBClassifier",
+      "n_estimators": 300,
+      "max_depth": 6,
+      "learning_rate": 0.05,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "random_state": 42
+    },
+    "validation": {
+      "threshold": 0.5,
+      "accuracy": 0.7425536574682435,
+      "precision": 0.6526204898604161,
+      "recall": 0.705982905982906,
+      "f1": 0.6782537293006706,
+      "pr_auc": 0.7261971685986798,
+      "confusion_matrix": [
+        [
+          4303,
+          1319
+        ],
+        [
+          1032,
+          2478
+        ]
+      ]
+    },
+    "test": {
+      "threshold": 0.5,
+      "accuracy": 0.7419917193288298,
+      "precision": 0.6411595716897363,
+      "recall": 0.711800521890403,
+      "f1": 0.6746358889804891,
+      "pr_auc": 0.7036814361586441,
+      "confusion_matrix": [
+        [
+          4355,
+          1374
+        ],
+        [
+          994,
+          2455
+        ]
+      ]
+    },
+    "model_path": "C:\\Users\\hp\\Downloads\\NLP Project\\SemantiQ\\artifacts\\phase5\\xgboost_experiment_B.joblib"
+  },
+  "C": {
+    "experiment": "C",
+    "feature_count": 18,
+    "features": [
+      "q1_char_length",
+      "q2_char_length",
+      "q1_word_count",
+      "q2_word_count",
+      "length_difference",
+      "length_ratio",
+      "common_word_count",
+      "common_word_ratio",
+      "jaccard_similarity",
+      "fuzzy_ratio",
+      "token_sort_ratio",
+      "token_set_ratio",
+      "char_bigram_jaccard",
+      "char_trigram_jaccard",
+      "word_bigram_overlap",
+      "word_trigram_overlap",
+      "word_tfidf_cosine",
+      "char_tfidf_cosine"
+    ],
+    "model_config": {
+      "type": "XGBClassifier",
+      "n_estimators": 300,
+      "max_depth": 6,
+      "learning_rate": 0.05,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "random_state": 42
+    },
+    "validation": {
+      "threshold": 0.5,
+      "accuracy": 0.7577748576434516,
+      "precision": 0.6753106428957321,
+      "recall": 0.7122507122507122,
+      "f1": 0.6932889628397116,
+      "pr_auc": 0.739915412967096,
+      "confusion_matrix": [
+        [
+          4420,
+          1202
+        ],
+        [
+          1010,
+          2500
+        ]
+      ]
+    },
+    "test": {
+      "threshold": 0.5,
+      "accuracy": 0.7561560252778383,
+      "precision": 0.6611658237955815,
+      "recall": 0.7202087561612062,
+      "f1": 0.6894254787676936,
+      "pr_auc": 0.7255190141635007,
+      "confusion_matrix": [
+        [
+          4456,
+          1273
+        ],
+        [
+          965,
+          2484
+        ]
+      ]
+    },
+    "model_path": "C:\\Users\\hp\\Downloads\\NLP Project\\SemantiQ\\artifacts\\phase5\\xgboost_experiment_C.joblib"
+  },
+  "D": {
+    "experiment": "D",
+    "feature_count": 9,
+    "features": [
+      "q1_char_length",
+      "q2_char_length",
+      "q1_word_count",
+      "q2_word_count",
+      "length_difference",
+      "length_ratio",
+      "common_word_count",
+      "common_word_ratio",
+      "minilm_cosine"
+    ],
+    "model_config": {
+      "type": "XGBClassifier",
+      "n_estimators": 300,
+      "max_depth": 6,
+      "learning_rate": 0.05,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "random_state": 42
+    },
+    "validation": {
+      "threshold": 0.5,
+      "accuracy": 0.818221638195357,
+      "precision": 0.7432930036822725,
+      "recall": 0.8051282051282052,
+      "f1": 0.7729759299781181,
+      "pr_auc": 0.8353055895834515,
+      "confusion_matrix": [
+        [
+          4646,
+          976
+        ],
+        [
+          684,
+          2826
+        ]
+      ]
+    },
+    "test": {
+      "threshold": 0.5,
+      "accuracy": 0.8094356068860318,
+      "precision": 0.7261841405002661,
+      "recall": 0.7912438387938533,
+      "f1": 0.7573192729290967,
+      "pr_auc": 0.8114994433508044,
+      "confusion_matrix": [
+        [
+          4700,
+          1029
+        ],
+        [
+          720,
+          2729
+        ]
+      ]
+    },
+    "model_path": "C:\\Users\\hp\\Downloads\\NLP Project\\SemantiQ\\artifacts\\phase5\\xgboost_experiment_D.joblib"
+  },
+  "E": {
+    "experiment": "E",
+    "feature_count": 19,
+    "features": [
+      "q1_char_length",
+      "q2_char_length",
+      "q1_word_count",
+      "q2_word_count",
+      "length_difference",
+      "length_ratio",
+      "common_word_count",
+      "common_word_ratio",
+      "jaccard_similarity",
+      "fuzzy_ratio",
+      "token_sort_ratio",
+      "token_set_ratio",
+      "char_bigram_jaccard",
+      "char_trigram_jaccard",
+      "word_bigram_overlap",
+      "word_trigram_overlap",
+      "word_tfidf_cosine",
+      "char_tfidf_cosine",
+      "minilm_cosine"
+    ],
+    "model_config": {
+      "type": "XGBClassifier",
+      "n_estimators": 300,
+      "max_depth": 6,
+      "learning_rate": 0.05,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "random_state": 42
+    },
+    "validation": {
+      "threshold": 0.5,
+      "accuracy": 0.8359614542268944,
+      "precision": 0.7763736263736264,
+      "recall": 0.8051282051282052,
+      "f1": 0.7904895104895104,
+      "pr_auc": 0.8567929456279879,
+      "confusion_matrix": [
+        [
+          4808,
+          814
+        ],
+        [
+          684,
+          2826
+        ]
+      ]
+    },
+    "test": {
+      "threshold": 0.5,
+      "accuracy": 0.8302462410111136,
+      "precision": 0.7581217581217581,
+      "recall": 0.8051609162075964,
+      "f1": 0.780933633295838,
+      "pr_auc": 0.8353076591869539,
+      "confusion_matrix": [
+        [
+          4843,
+          886
+        ],
+        [
+          672,
+          2777
+        ]
+      ]
+    },
+    "model_path": "C:\\Users\\hp\\Downloads\\NLP Project\\SemantiQ\\artifacts\\phase5\\xgboost_experiment_E.joblib"
+  }
+}

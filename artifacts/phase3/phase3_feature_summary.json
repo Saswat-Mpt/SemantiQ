@@ -1,0 +1,156 @@
+{
+  "num_rows": 198394,
+  "num_features": 16,
+  "features": [
+    "q1_char_length",
+    "q2_char_length",
+    "q1_word_count",
+    "q2_word_count",
+    "length_difference",
+    "length_ratio",
+    "common_word_count",
+    "common_word_ratio",
+    "jaccard_similarity",
+    "fuzzy_ratio",
+    "token_sort_ratio",
+    "token_set_ratio",
+    "char_bigram_jaccard",
+    "char_trigram_jaccard",
+    "word_bigram_overlap",
+    "word_trigram_overlap"
+  ],
+  "missing_values": {
+    "q1_char_length": 0,
+    "q2_char_length": 0,
+    "q1_word_count": 0,
+    "q2_word_count": 0,
+    "length_difference": 0,
+    "length_ratio": 0,
+    "common_word_count": 0,
+    "common_word_ratio": 0,
+    "jaccard_similarity": 0,
+    "fuzzy_ratio": 0,
+    "token_sort_ratio": 0,
+    "token_set_ratio": 0,
+    "char_bigram_jaccard": 0,
+    "char_trigram_jaccard": 0,
+    "word_bigram_overlap": 0,
+    "word_trigram_overlap": 0
+  },
+  "infinite_values": {
+    "q1_char_length": 0,
+    "q2_char_length": 0,
+    "q1_word_count": 0,
+    "q2_word_count": 0,
+    "length_difference": 0,
+    "length_ratio": 0,
+    "common_word_count": 0,
+    "common_word_ratio": 0,
+    "jaccard_similarity": 0,
+    "fuzzy_ratio": 0,
+    "token_sort_ratio": 0,
+    "token_set_ratio": 0,
+    "char_bigram_jaccard": 0,
+    "char_trigram_jaccard": 0,
+    "word_bigram_overlap": 0,
+    "word_trigram_overlap": 0
+  },
+  "statistics": {
+    "q1_char_length": {
+      "mean": 59.49245071411133,
+      "std": 29.84735107421875,
+      "min": 2.0,
+      "max": 623.0
+    },
+    "q2_char_length": {
+      "mean": 60.06266403198242,
+      "std": 33.10386276245117,
+      "min": 2.0,
+      "max": 821.0
+    },
+    "q1_word_count": {
+      "mean": 10.937240600585938,
+      "std": 5.414180755615234,
+      "min": 1.0,
+      "max": 125.0
+    },
+    "q2_word_count": {
+      "mean": 11.176462173461914,
+      "std": 6.131660461425781,
+      "min": 1.0,
+      "max": 147.0
+    },
+    "length_difference": {
+      "mean": 20.044330596923828,
+      "std": 24.723838806152344,
+      "min": 0.0,
+      "max": 671.0
+    },
+    "length_ratio": {
+      "mean": 0.7539510130882263,
+      "std": 0.18776603043079376,
+      "min": 0.016393441706895828,
+      "max": 1.0
+    },
+    "common_word_count": {
+      "mean": 4.518024921417236,
+      "std": 3.106821060180664,
+      "min": 0.0,
+      "max": 41.0
+    },
+    "common_word_ratio": {
+      "mean": 0.3263278901576996,
+      "std": 0.2357393503189087,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "jaccard_similarity": {
+      "mean": 0.3263278901576996,
+      "std": 0.2357393503189087,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "fuzzy_ratio": {
+      "mean": 0.6237059235572815,
+      "std": 0.18215689063072205,
+      "min": 0.032258063554763794,
+      "max": 1.0
+    },
+    "token_sort_ratio": {
+      "mean": 0.6306362152099609,
+      "std": 0.1700710505247116,
+      "min": 0.022727273404598236,
+      "max": 1.0
+    },
+    "token_set_ratio": {
+      "mean": 0.6970399618148804,
+      "std": 0.1810024082660675,
+      "min": 0.024390242993831635,
+      "max": 1.0
+    },
+    "char_bigram_jaccard": {
+      "mean": 0.4771007001399994,
+      "std": 0.20715069770812988,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "char_trigram_jaccard": {
+      "mean": 0.3629491627216339,
+      "std": 0.22588874399662018,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "word_bigram_overlap": {
+      "mean": 0.280465304851532,
+      "std": 0.28177815675735474,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "word_trigram_overlap": {
+      "mean": 0.17472892999649048,
+      "std": 0.26253411173820496,
+      "min": 0.0,
+      "max": 1.0
+    }
+  }
+}

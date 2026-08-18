@@ -1,0 +1,85 @@
+{
+  "phase": "phase6",
+  "final_model": "Experiment E",
+  "precision_target": 0.9,
+  "threshold_selection": {
+    "data": "validation_only",
+    "selected_threshold": 0.803432047367096,
+    "validation_precision": 0.9001272264631043,
+    "validation_recall": 0.4031339031339031,
+    "validation_f1": 0.5568673750491933,
+    "true_positive": 1415,
+    "false_positive": 157,
+    "false_negative": 2095
+  },
+  "baseline_threshold_0_50": {
+    "test": {
+      "threshold": 0.5,
+      "accuracy": 0.8302462410111136,
+      "precision": 0.7581217581217581,
+      "recall": 0.8051609162075964,
+      "f1": 0.780933633295838,
+      "pr_auc": 0.8353076591869539,
+      "positive_predictions": 3663,
+      "total_predictions": 9178,
+      "confusion_matrix": [
+        [
+          4843,
+          886
+        ],
+        [
+          672,
+          2777
+        ]
+      ]
+    }
+  },
+  "frozen_threshold_test": {
+    "test": {
+      "threshold": 0.803432047367096,
+      "accuracy": 0.7550664632817607,
+      "precision": 0.8807863031071655,
+      "recall": 0.40272542766019137,
+      "f1": 0.5527258257063271,
+      "pr_auc": 0.8353076591869539,
+      "positive_predictions": 1577,
+      "total_predictions": 9178,
+      "confusion_matrix": [
+        [
+          5541,
+          188
+        ],
+        [
+          2060,
+          1389
+        ]
+      ]
+    }
+  },
+  "features": [
+    "q1_char_length",
+    "q2_char_length",
+    "q1_word_count",
+    "q2_word_count",
+    "length_difference",
+    "length_ratio",
+    "common_word_count",
+    "common_word_ratio",
+    "jaccard_similarity",
+    "fuzzy_ratio",
+    "token_sort_ratio",
+    "token_set_ratio",
+    "char_bigram_jaccard",
+    "char_trigram_jaccard",
+    "word_bigram_overlap",
+    "word_trigram_overlap",
+    "word_tfidf_cosine",
+    "char_tfidf_cosine",
+    "minilm_cosine"
+  ],
+  "data_partitions": {
+    "train": 198394,
+    "validation": 9132,
+    "test": 9178
+  }
+}
