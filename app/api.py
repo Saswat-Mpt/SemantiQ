@@ -136,7 +136,7 @@ def model_info():
         "model_name": "SemantIQ",
         "model_version": "1.1.0",
         "deployed_champion": "Experiment E (19 Features)",
-        "architecture": "19-Feature Hybrid Fusion + Contradiction Verifier + XGBoost",
+        "architecture": "19-Feature Hybrid Fusion + XGBoost with Critical-Token Diagnostics",
         "num_features": len(engine.feature_columns),
         "features": engine.feature_columns,
         "threshold_policy": {
@@ -176,7 +176,7 @@ def predict(request: QuestionPairRequest):
 @app.post("/batch-predict", response_model=list[PredictResponse], tags=["Inference"])
 @app.post("/api/v1/batch-predict", response_model=list[PredictResponse], tags=["Inference"])
 def batch_predict(request: BatchPairRequest):
-    """High-throughput vectorized batch prediction for up to 100 question pairs."""
+    """Vectorized batch prediction for up to 100 question pairs."""
     try:
         engine = get_engine()
         pairs = [(p.question1, p.question2) for p in request.pairs]

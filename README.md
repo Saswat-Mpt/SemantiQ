@@ -97,7 +97,7 @@ We tested the model against a curated set of 48 challenging question pairs:
 | **Paraphrase Duplicates** | *"Shed excess body weight"* vs *"Slim down rapidly"* | 12 | **1 / 12** | 0 | **11** |
 
 ### Known Limitations:
-* **Strengths:** At $T^* = 0.8034$, the model avoids false merges (**0% false positive rate**) across entity, numeric, tool, and intent substitutions.
+* **Strengths:** Across the entity, numeric, tool, and intent-substitution categories, no false merges were observed. Negation remains a harder case, with one false merge in the curated set (*"Is drinking green tea good for health?"* vs *"Is drinking green tea bad for health?"*).
 * **Weakness:** Because the model relies on lexical overlap and bi-encoder cosine similarity, paraphrases with completely different vocabulary (zero word overlap) receive lower scores and get marked as `NEEDS_REVIEW` or `DISTINCT`. This is why the 3-tier review policy is used instead of auto-merging.
 
 ---
@@ -165,6 +165,7 @@ python scripts/run_all.py
 
 ```text
 SemantiQ/
+├── LICENSE                      # MIT License
 ├── app/
 │   └── api.py                   # FastAPI service
 ├── src/
