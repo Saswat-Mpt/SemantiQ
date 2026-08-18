@@ -63,12 +63,12 @@ async def add_request_metadata(request: Request, call_next):
 # ============================================================
 
 class QuestionPairRequest(BaseModel):
-    question1: str = Field(..., min_length=1, max_length=1000, example="How can I learn Python for data science?")
-    question2: str = Field(..., min_length=1, max_length=1000, example="What is the best way to study Python for data analysis?")
+    question1: str = Field(..., min_length=1, max_length=1000, json_schema_extra={"example": "How can I learn Python for data science?"})
+    question2: str = Field(..., min_length=1, max_length=1000, json_schema_extra={"example": "What is the best way to study Python for data analysis?"})
 
 
 class BatchPairRequest(BaseModel):
-    pairs: list[QuestionPairRequest] = Field(..., min_items=1, max_items=100)
+    pairs: list[QuestionPairRequest] = Field(..., min_length=1, max_length=100)
 
 
 class PredictResponse(BaseModel):
@@ -76,6 +76,7 @@ class PredictResponse(BaseModel):
     question2: str
     score: float
     decision: str
+    decision_band: str
     confidence: str
     thresholds: dict[str, float]
     contradiction_warning: bool
@@ -87,6 +88,7 @@ class PredictResponse(BaseModel):
 class ModelInfoResponse(BaseModel):
     model_name: str
     model_version: str
+    deployed_champion: str
     architecture: str
     num_features: int
     features: list[str]
@@ -133,6 +135,7 @@ def model_info():
     return {
         "model_name": "SemantIQ",
         "model_version": "1.1.0",
+        "deployed_champion": "Experiment E (19 Features)",
         "architecture": "19-Feature Hybrid Fusion + Contradiction Verifier + XGBoost",
         "num_features": len(engine.feature_columns),
         "features": engine.feature_columns,
@@ -146,8 +149,8 @@ def model_info():
             },
         },
         "calibration": {
-            "expected_calibration_error": 0.01202,
-            "brier_score": 0.1172,
+            "raw_xgboost_ece": 0.01202,
+            "raw_xgboost_brier": 0.1172,
         },
         "status": "online",
     }

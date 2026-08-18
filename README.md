@@ -6,7 +6,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](Dockerfile)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**SemantIQ** is a cost-aware semantic deduplication and intent-verification system designed for retrieval, search, question-answering, and knowledge-management pipelines where false merges can be costly. It bridges classical surface lexical matching, TF-IDF weighted n-grams, and dense sentence transformers with critical-token contradiction verification and probability calibration.
+**SemantIQ** is a cost-aware semantic deduplication and intent-verification system designed for retrieval, search, question-answering, and knowledge-management pipelines where false merges can be costly. It combines classical surface lexical matching, TF-IDF weighted n-grams, and dense sentence transformers with critical-token contradiction verification and cost-aware decision thresholding.
 
 ---
 
@@ -17,7 +17,7 @@
                                               │
                     ┌─────────────────────────┴─────────────────────────┐
                     ▼                                                   ▼
-         19-Feature Fusion Pipeline                           Critical-Token Engine
+      19-Feature Fusion Pipeline (Model E)                    Critical-Token Diagnostics
                     │                                                   │
   ├── Statistical (8)  [Lengths, word counts, ratios]      ├── Numeric/Year mismatch (e.g., 2017 vs 2018)
   ├── Lexical (8)      [Jaccard, RapidFuzz, n-grams]       ├── Entity mismatch (e.g., IITD vs IITG)
@@ -25,16 +25,15 @@
   └── MiniLM (1)       [Pretrained Dense Cosine]           └── Question-starter shift (e.g., how vs what)
                     │                                                   │
                     ▼                                                   ▼
-        XGBoost Fusion Classifier (Exp E/F)               Contradiction Verification Layer
+       XGBoost Champion Classifier (Exp E)                Contradiction Verification Layer
                     │                                                   │
                     ▼                                                   │
-          Calibrated Score P ∈ [0, 1]                                   │
-          (ECE = 1.20%, Brier = 0.1172)                                 │
+             Raw Model Score P ∈ [0, 1]                                 │
                     │                                                   │
                     └─────────────────────────┬─────────────────────────┘
                                               │
                                               ▼
-                             3-Tier Calibrated Decision Policy
+                              3-Tier Cost-Aware Decision Policy
                                               │
                    ┌──────────────────────────┼──────────────────────────┐
                    ▼                          ▼                          ▼
@@ -45,23 +44,23 @@
 
 ---
 
-## 2. Controlled Experimental Ablation (A → F)
+## 2. Controlled Experimental Ablation (A → E)
 
 All experiments were trained on the **identical Phase 1 partition** (198,394 train pairs) and evaluated on the **identical held-out test split** (9,178 pairs) with classifier hyperparameters held constant:
 
-| Exp | Feature Family | Dim | Test Precision | Test Recall | Test F1 | Test PR-AUC |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
-| **A** | Statistical Only | 8 | 0.5949 | 0.7037 | 0.6447 | 0.6296 |
-| **B** | A + String / Jaccard / Fuzzy | 16 | 0.6412 | 0.7118 | 0.6746 | 0.7037 |
-| **C** | B + Word & Char TF-IDF | 18 | 0.6612 | 0.7202 | 0.6894 | 0.7255 |
-| **D** | A + Pretrained MiniLM | 9 | 0.7262 | 0.7912 | 0.7573 | 0.8115 |
-| **E** | **Full Fusion (A + B + C + D)** | **19** | **0.7581** | **0.8052** | **0.7809** | **0.8353** |
-| **F** | **E + Contradiction Signals** | **24** | **0.7640** | **0.8072** | **0.7850** | **0.8404** |
+| Exp | Feature Family | Dim | Test Precision | Test Recall | Test F1 | Test PR-AUC | Status |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
+| **A** | Statistical Only | 8 | 0.5949 | 0.7037 | 0.6447 | 0.6296 | Baseline |
+| **B** | A + String / Jaccard / Fuzzy | 16 | 0.6412 | 0.7118 | 0.6746 | 0.7037 | Feature Layer |
+| **C** | B + Word & Char TF-IDF | 18 | 0.6612 | 0.7202 | 0.6894 | 0.7255 | Sparse Representation |
+| **D** | A + Pretrained MiniLM | 9 | 0.7262 | 0.7912 | 0.7573 | 0.8115 | Dense Representation |
+| **E** | **Full Fusion (A + B + C + D)** | **19** | **0.7581** | **0.8052** | **0.7809** | **0.8353** | **Production Champion** |
+| *F* | *E + Contradiction Signals* | *24* | *0.7640* | *0.8072* | *0.7850* | *0.8404* | *Phase 8 Experiment* |
 
 ### Key Experimental Insights:
 1. **Semantic Dominance:** Adding a single dense semantic representation (`minilm_cosine`) to simple statistics (**D vs A**) increases test PR-AUC by **+0.1819**, outperforming the entire 18-feature classical stack (**C**) by **+0.0860**.
-2. **Complementary Fusion:** Combining all classical features with MiniLM (**E vs D**) gives an additional **+0.0238 PR-AUC** gain.
-3. **Contradiction Verification:** Incorporating deterministic critical-token signals (**F vs E**) pushes test PR-AUC to **0.8404** (+0.0051) and test F1 to **0.7850**.
+2. **Complementary Fusion:** Combining all classical features with MiniLM (**E vs D**) provides an additional **+0.0238 PR-AUC** gain.
+3. **Production Deployment Choice:** While experimental **Model F** slightly improves PR-AUC (+0.0051), **Model E (19 features)** is selected as the primary production champion for architectural simplicity, maintaining contradiction diagnostics as a verification layer.
 
 ---
 
@@ -83,21 +82,37 @@ In deduplication systems, false merges corrupt search indices and knowledge grap
 
 ---
 
-## 4. Curated Adversarial Benchmark Breakdown
+## 4. Probability Calibration Analysis
 
-Evaluated against the curated adversarial benchmark suite (`src/adversarial_suite.py`):
+Evaluated on held-out test data:
+* **Raw XGBoost Classifier:** Brier Score = `0.11720`, Expected Calibration Error (ECE) = **`0.01202` (1.20%)**.
+* **Platt Scaling (Sigmoid):** Brier Score = `0.12004`, ECE = `0.03926`.
+* **Isotonic Regression:** Brier Score = `0.11774`, ECE = `0.01549`.
 
-| Adversarial Challenge Category | Example Test Pair | Adversarial Accuracy | False Positive Rate |
-| :--- | :--- | :---: | :---: |
-| **Entity Substitutions** | *"Placement package at IIT Delhi"* vs *"IIT Bombay"* | **100.0%** | **0.0%** |
-| **Numeric & Year Shifts** | *"JEE cutoff in 2017"* vs *"2018"*, *"50% vs 90%"* | **100.0%** | **0.0%** |
-| **Intent / Career Shifts** | *"What is ML"* vs *"How to get an ML engineer job"* | **100.0%** | **0.0%** |
-| **Tool / Language Shifts** | *"Web server in C"* vs *"Web server in C++"* | **100.0%** | **0.0%** |
-| **Negation Inversions** | *"Why learn Python"* vs *"Why shouldn't I learn Python"* | **66.7%** | 33.3% |
+*Raw XGBoost tree probabilities demonstrated the lowest Brier error and calibration error, so uncalibrated raw model probabilities are retained for production inference.*
 
 ---
 
-## 5. Quickstart & Usage
+## 5. Curated Adversarial Benchmark Breakdown
+
+Evaluated against the 48-pair curated adversarial challenge suite (`src/adversarial_suite.py`):
+
+| Challenge Category | Example Test Pair | Total | Correct | Accuracy | False Positives | False Negatives |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| **Entity Substitutions** | *"Placement package at IIT Delhi"* vs *"IIT Bombay"* | 8 | 8 | **100.0%** | **0** | 0 |
+| **Numeric & Year Shifts** | *"JEE cutoff in 2017"* vs *"2018"*, *"50% vs 90%"* | 8 | 8 | **100.0%** | **0** | 0 |
+| **Intent / Career Shifts** | *"What is ML"* vs *"How to get an ML engineer job"* | 7 | 7 | **100.0%** | **0** | 0 |
+| **Tool / Language Shifts** | *"Web server in C"* vs *"Web server in C++"* | 6 | 6 | **100.0%** | **0** | 0 |
+| **Negation Inversions** | *"Why learn Python"* vs *"Why shouldn't I learn Python"* | 7 | 6 | **85.7%** | **1** | 0 |
+| **Paraphrase Duplicates** | *"Shed excess body weight"* vs *"Slim down rapidly"* | 12 | 1 | **8.3%** | 0 | **11** |
+
+### Scientific Finding on Model Strengths & Weaknesses:
+* **Strengths:** Under strict precision thresholding ($T^* = 0.8034$), SemantIQ provides near-perfect protection (**0% False Positive Rate**) against entity swaps, numeric differences, tool substitutions, and intent shifts.
+* **Weaknesses:** Because high precision requires conservative thresholding, extreme zero-overlap paraphrases are flagged as `NEEDS_REVIEW` or `DISTINCT` rather than auto-merged. This demonstrates why the 3-tier policy is essential for human-in-the-loop review.
+
+---
+
+## 6. Quickstart & Usage
 
 ### Installation
 ```bash
@@ -120,8 +135,8 @@ result = detector.predict_pair(
     "What is the best way to study Python for data analysis?"
 )
 print(result["decision"])              # DUPLICATE / NEEDS_REVIEW / DISTINCT
-print(result["score"])                 # e.g., 0.7789
-print(result["confidence"])            # HIGH / MODERATE
+print(result["score"])                 # 0.7789
+print(result["decision_band"])         # HUMAN_REVIEW_REQUIRED
 print(result["contradiction_warning"]) # False
 
 # High-throughput batch prediction
@@ -163,7 +178,7 @@ python scripts/run_all.py
 
 ---
 
-## 6. Repository Structure
+## 7. Repository Structure
 
 ```text
 SemantiQ/
@@ -179,7 +194,7 @@ SemantiQ/
 │   ├── phase7_analysis.py       # Error taxonomy and failure analysis
 │   ├── phase8_enhanced_verification.py # Model F, calibration & bootstrap CIs
 │   ├── critical_tokens.py       # Contradiction & information-changing token engine
-│   ├── adversarial_suite.py     # Curated adversarial evaluation benchmark
+│   ├── adversarial_suite.py     # 48-Pair curated adversarial evaluation benchmark
 │   └── inference.py             # Unified inference engine with LRU cache & batching
 ├── scripts/
 │   ├── run_all.py               # Master one-click reproducibility runner

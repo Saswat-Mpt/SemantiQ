@@ -28,8 +28,8 @@ class SemantIQ:
     Production-oriented inference engine for SemantIQ deduplication.
     
     Provides:
-      - 19-feature fusion vector extraction
-      - Calibrated 3-tier decision policy (DUPLICATE / NEEDS_REVIEW / DISTINCT)
+      - 19-feature fusion vector extraction (Champion Model E)
+      - Cost-aware 3-tier decision policy (DUPLICATE / NEEDS_REVIEW / DISTINCT)
       - Critical token contradiction & mismatch diagnostics
       - LRU query embedding cache for fast repeated query lookups
       - Vectorized high-throughput batch prediction
@@ -39,7 +39,7 @@ class SemantIQ:
     def __init__(self, project_root: Path | None = None) -> None:
         root = project_root or PROJECT_ROOT
 
-        # Load Champion XGBoost Model (Experiment E)
+        # Load Champion XGBoost Model (Experiment E - 19 features)
         model_path = root / "artifacts" / "phase5" / "xgboost_experiment_E.joblib"
         if not model_path.exists():
             raise FileNotFoundError(f"Model checkpoint not found: {model_path}")
@@ -115,7 +115,7 @@ class SemantIQ:
     def predict_pair(self, question1: str, question2: str) -> dict[str, Any]:
         """
         Executes end-to-end inference on a single question pair.
-        Returns 3-tier calibrated decision, duplicate score, and explanatory evidence.
+        Returns 3-tier cost-aware decision, model score, and explanatory evidence.
         """
         start_time = time.perf_counter()
 
@@ -131,24 +131,27 @@ class SemantIQ:
         features_dict = self.extract_features(q1, q2)
         features_df = pd.DataFrame([[features_dict[name] for name in self.feature_columns]], columns=self.feature_columns)
 
-        # Predict model score
+        # Predict model score (P in [0, 1])
         model_score = float(self.model.predict_proba(features_df)[0, 1])
 
         # Critical token contradictions check
         diag = evaluate_critical_tokens(q1, q2)
 
-        # 3-Tier Calibrated Decision Policy
+        # 3-Tier Cost-Aware Decision Policy
         #   - score >= T* (0.8034): DUPLICATE (High confidence, >= 90% validation target precision)
         #   - 0.50 <= score < T*:   NEEDS_REVIEW (Uncertain region / potential subtle distinction)
         #   - score < 0.50:         DISTINCT (High confidence non-duplicate)
         if model_score >= self.high_precision_threshold:
             decision = "DUPLICATE"
+            decision_band = "HIGH_CONFIDENCE_MERGE"
             confidence = "HIGH"
         elif model_score >= self.default_threshold:
             decision = "NEEDS_REVIEW"
+            decision_band = "HUMAN_REVIEW_REQUIRED"
             confidence = "MODERATE"
         else:
             decision = "DISTINCT"
+            decision_band = "HIGH_CONFIDENCE_DISTINCT"
             confidence = "HIGH" if model_score <= 0.20 else "MODERATE"
 
         # Diagnostic alert: Flag high semantic score with critical token mismatch
@@ -164,6 +167,7 @@ class SemantIQ:
             "question2": q2,
             "score": round(model_score, 4),
             "decision": decision,
+            "decision_band": decision_band,
             "confidence": confidence,
             "thresholds": {
                 "high_precision_T_star": round(self.high_precision_threshold, 4),
@@ -256,12 +260,15 @@ class SemantIQ:
             
             if score >= self.high_precision_threshold:
                 decision = "DUPLICATE"
+                decision_band = "HIGH_CONFIDENCE_MERGE"
                 confidence = "HIGH"
             elif score >= self.default_threshold:
                 decision = "NEEDS_REVIEW"
+                decision_band = "HUMAN_REVIEW_REQUIRED"
                 confidence = "MODERATE"
             else:
                 decision = "DISTINCT"
+                decision_band = "HIGH_CONFIDENCE_DISTINCT"
                 confidence = "HIGH" if score <= 0.20 else "MODERATE"
 
             contradiction_warning = bool(
@@ -274,6 +281,7 @@ class SemantIQ:
                 "question2": q2_list[i],
                 "score": round(score, 4),
                 "decision": decision,
+                "decision_band": decision_band,
                 "confidence": confidence,
                 "thresholds": {
                     "high_precision_T_star": round(self.high_precision_threshold, 4),

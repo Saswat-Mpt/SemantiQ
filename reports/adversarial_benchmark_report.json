@@ -1,43 +1,49 @@
 {
   "overall_accuracy": 0.75,
-  "total_test_pairs": 20,
-  "total_correct": 15,
+  "total_test_pairs": 48,
+  "total_correct": 36,
   "category_breakdown": {
     "entity_substitution": {
-      "total": 4,
+      "total": 8,
+      "correct": 8,
       "accuracy": 1.0,
       "false_positives": 0,
       "false_negatives": 0
     },
     "numeric_year_shift": {
-      "total": 4,
+      "total": 8,
+      "correct": 8,
       "accuracy": 1.0,
       "false_positives": 0,
       "false_negatives": 0
     },
     "negation_flip": {
-      "total": 3,
-      "accuracy": 0.6667,
+      "total": 7,
+      "correct": 6,
+      "accuracy": 0.8571,
       "false_positives": 1,
       "false_negatives": 0
     },
     "intent_shift": {
-      "total": 3,
+      "total": 7,
+      "correct": 7,
       "accuracy": 1.0,
       "false_positives": 0,
       "false_negatives": 0
     },
     "tool_substitution": {
-      "total": 2,
+      "total": 6,
+      "correct": 6,
       "accuracy": 1.0,
       "false_positives": 0,
       "false_negatives": 0
     },
     "paraphrase_duplicate": {
-      "total": 4,
-      "accuracy": 0.0,
+      "total": 12,
+      "correct": 1,
+      "accuracy": 0.0833,
       "false_positives": 0,
-      "false_negatives": 4
+      "false_negatives": 11
     }
   },
   "detailed_results": [
@@ -48,10 +54,10 @@
       "expected_label": 0,
       "model_score": 0.5388,
       "decision": "NEEDS_REVIEW",
-      "confidence": "MODERATE",
+      "decision_band": "HUMAN_REVIEW_REQUIRED",
       "contradiction_warning": true,
       "is_correct": true,
-      "description": "Institution name substitution with identical structure"
+      "description": "Institution name substitution (IIT Delhi vs IIT Bombay)"
     },
     {
       "category": "entity_substitution",
@@ -60,10 +66,10 @@
       "expected_label": 0,
       "model_score": 0.1419,
       "decision": "DISTINCT",
-      "confidence": "HIGH",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
       "contradiction_warning": false,
       "is_correct": true,
-      "description": "Company name substitution with identical intent"
+      "description": "Tech company name substitution (Google vs Microsoft)"
     },
     {
       "category": "entity_substitution",
@@ -72,22 +78,70 @@
       "expected_label": 0,
       "model_score": 0.02,
       "decision": "DISTINCT",
-      "confidence": "HIGH",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
       "contradiction_warning": false,
       "is_correct": true,
       "description": "Destination substitution with identical grammar"
     },
     {
       "category": "entity_substitution",
-      "question1": "Who is the CEO of Apple Inc?",
-      "question2": "Who is the CEO of Tesla Inc?",
+      "question1": "Who is the current CEO of Apple Inc?",
+      "question2": "Who is the current CEO of Tesla Inc?",
       "expected_label": 0,
-      "model_score": 0.1326,
+      "model_score": 0.1342,
       "decision": "DISTINCT",
-      "confidence": "HIGH",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
       "contradiction_warning": false,
       "is_correct": true,
       "description": "Entity swap in factual inquiry"
+    },
+    {
+      "category": "entity_substitution",
+      "question1": "What are the tourist attractions to visit in Tokyo?",
+      "question2": "What are the tourist attractions to visit in Kyoto?",
+      "expected_label": 0,
+      "model_score": 0.1403,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "City name substitution (Tokyo vs Kyoto)"
+    },
+    {
+      "category": "entity_substitution",
+      "question1": "How do I apply for a student visa to Canada?",
+      "question2": "How do I apply for a student visa to Australia?",
+      "expected_label": 0,
+      "model_score": 0.0261,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Country name substitution in immigration query"
+    },
+    {
+      "category": "entity_substitution",
+      "question1": "What is the plot summary of Harry Potter and the Sorcerer's Stone?",
+      "question2": "What is the plot summary of Harry Potter and the Chamber of Secrets?",
+      "expected_label": 0,
+      "model_score": 0.1392,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Book title subtitle substitution in franchise"
+    },
+    {
+      "category": "entity_substitution",
+      "question1": "How do I transfer money from Chase Bank to Wells Fargo?",
+      "question2": "How do I transfer money from Chase Bank to Bank of America?",
+      "expected_label": 0,
+      "model_score": 0.2939,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Target banking institution substitution"
     },
     {
       "category": "numeric_year_shift",
@@ -96,10 +150,10 @@
       "expected_label": 0,
       "model_score": 0.5296,
       "decision": "NEEDS_REVIEW",
-      "confidence": "MODERATE",
+      "decision_band": "HUMAN_REVIEW_REQUIRED",
       "contradiction_warning": true,
       "is_correct": true,
-      "description": "Year token shift in cutoff query"
+      "description": "Year token shift (2017 vs 2018)"
     },
     {
       "category": "numeric_year_shift",
@@ -108,22 +162,22 @@
       "expected_label": 0,
       "model_score": 0.3965,
       "decision": "DISTINCT",
-      "confidence": "MODERATE",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
       "contradiction_warning": false,
       "is_correct": true,
-      "description": "Target percentage mismatch with different target difficulty"
+      "description": "Target percentage mismatch (50% vs 90%)"
     },
     {
       "category": "numeric_year_shift",
-      "question1": "What are the specs of iPhone 14 Pro?",
-      "question2": "What are the specs of iPhone 15 Pro?",
+      "question1": "What are the technical specs of iPhone 14 Pro?",
+      "question2": "What are the technical specs of iPhone 15 Pro?",
       "expected_label": 0,
-      "model_score": 0.4996,
+      "model_score": 0.4945,
       "decision": "DISTINCT",
-      "confidence": "MODERATE",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
       "contradiction_warning": false,
       "is_correct": true,
-      "description": "Product version number mismatch"
+      "description": "Product version number mismatch (14 vs 15)"
     },
     {
       "category": "numeric_year_shift",
@@ -132,10 +186,58 @@
       "expected_label": 0,
       "model_score": 0.3742,
       "decision": "DISTINCT",
-      "confidence": "MODERATE",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
       "contradiction_warning": false,
       "is_correct": true,
-      "description": "Distance metric mismatch"
+      "description": "Distance metric mismatch (5 km vs 10 km)"
+    },
+    {
+      "category": "numeric_year_shift",
+      "question1": "What is the interest rate for a 15 year fixed mortgage?",
+      "question2": "What is the interest rate for a 30 year fixed mortgage?",
+      "expected_label": 0,
+      "model_score": 0.2234,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Mortgage duration mismatch (15 vs 30 years)"
+    },
+    {
+      "category": "numeric_year_shift",
+      "question1": "How much salary can I expect with 2 years of experience in Java?",
+      "question2": "How much salary can I expect with 10 years of experience in Java?",
+      "expected_label": 0,
+      "model_score": 0.3653,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Experience duration mismatch (2 vs 10 years)"
+    },
+    {
+      "category": "numeric_year_shift",
+      "question1": "What was the GDP growth rate of India in 2020?",
+      "question2": "What was the GDP growth rate of India in 2023?",
+      "expected_label": 0,
+      "model_score": 0.2144,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Macroeconomic temporal shift (2020 vs 2023)"
+    },
+    {
+      "category": "numeric_year_shift",
+      "question1": "What is the battery capacity of Samsung Galaxy S23?",
+      "question2": "What is the battery capacity of Samsung Galaxy S24?",
+      "expected_label": 0,
+      "model_score": 0.1588,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Device model number shift (S23 vs S24)"
     },
     {
       "category": "negation_flip",
@@ -144,10 +246,10 @@
       "expected_label": 0,
       "model_score": 0.624,
       "decision": "NEEDS_REVIEW",
-      "confidence": "MODERATE",
+      "decision_band": "HUMAN_REVIEW_REQUIRED",
       "contradiction_warning": true,
       "is_correct": true,
-      "description": "Negation modifier changing core premise"
+      "description": "Negation modifier changing core premise (should vs shouldn't)"
     },
     {
       "category": "negation_flip",
@@ -156,10 +258,10 @@
       "expected_label": 0,
       "model_score": 0.4197,
       "decision": "DISTINCT",
-      "confidence": "MODERATE",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
       "contradiction_warning": false,
       "is_correct": true,
-      "description": "Polarity and action inversion"
+      "description": "Polarity and action inversion (invest vs avoid investing)"
     },
     {
       "category": "negation_flip",
@@ -168,10 +270,58 @@
       "expected_label": 0,
       "model_score": 0.832,
       "decision": "DUPLICATE",
-      "confidence": "HIGH",
+      "decision_band": "HIGH_CONFIDENCE_MERGE",
       "contradiction_warning": false,
       "is_correct": false,
-      "description": "Antonym / polarity swap"
+      "description": "Antonym / polarity swap (good vs bad)"
+    },
+    {
+      "category": "negation_flip",
+      "question1": "Can I travel to Europe without a visa?",
+      "question2": "Can I travel to Europe with a visa?",
+      "expected_label": 0,
+      "model_score": 0.1843,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Prepositional negation (with vs without)"
+    },
+    {
+      "category": "negation_flip",
+      "question1": "Why is democracy the best form of government?",
+      "question2": "Why is democracy not the best form of government?",
+      "expected_label": 0,
+      "model_score": 0.7838,
+      "decision": "NEEDS_REVIEW",
+      "decision_band": "HUMAN_REVIEW_REQUIRED",
+      "contradiction_warning": true,
+      "is_correct": true,
+      "description": "Negative particle insertion (is vs is not)"
+    },
+    {
+      "category": "negation_flip",
+      "question1": "How do I enable cookies in Google Chrome?",
+      "question2": "How do I disable cookies in Google Chrome?",
+      "expected_label": 0,
+      "model_score": 0.5305,
+      "decision": "NEEDS_REVIEW",
+      "decision_band": "HUMAN_REVIEW_REQUIRED",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Functional antonym (enable vs disable)"
+    },
+    {
+      "category": "negation_flip",
+      "question1": "Should I accept a counter offer from my current employer?",
+      "question2": "Should I reject a counter offer from my current employer?",
+      "expected_label": 0,
+      "model_score": 0.3468,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Action polarity inversion (accept vs reject)"
     },
     {
       "category": "intent_shift",
@@ -180,7 +330,7 @@
       "expected_label": 0,
       "model_score": 0.0059,
       "decision": "DISTINCT",
-      "confidence": "HIGH",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
       "contradiction_warning": false,
       "is_correct": true,
       "description": "Definition vs Career path for identical topic"
@@ -192,7 +342,7 @@
       "expected_label": 0,
       "model_score": 0.0002,
       "decision": "DISTINCT",
-      "confidence": "HIGH",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
       "contradiction_warning": false,
       "is_correct": true,
       "description": "Medical side-effect query vs purchasing query"
@@ -204,10 +354,58 @@
       "expected_label": 0,
       "model_score": 0.0512,
       "decision": "DISTINCT",
-      "confidence": "HIGH",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
       "contradiction_warning": false,
       "is_correct": true,
       "description": "Physics mechanism vs financial cost query"
+    },
+    {
+      "category": "intent_shift",
+      "question1": "What is the history of the Eiffel Tower?",
+      "question2": "How much are ticket prices for the Eiffel Tower?",
+      "expected_label": 0,
+      "model_score": 0.0671,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Historical inquiry vs ticketing price query"
+    },
+    {
+      "category": "intent_shift",
+      "question1": "How do I learn quantum physics from scratch?",
+      "question2": "Who discovered quantum physics?",
+      "expected_label": 0,
+      "model_score": 0.0311,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Learning path vs biographical historical query"
+    },
+    {
+      "category": "intent_shift",
+      "question1": "What does a data analyst do on a daily basis?",
+      "question2": "What are the best certifications for data analysts?",
+      "expected_label": 0,
+      "model_score": 0.0347,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Job description vs certification recommendation"
+    },
+    {
+      "category": "intent_shift",
+      "question1": "Why is the sky blue during daylight?",
+      "question2": "How to photograph the blue sky with a DSLR camera?",
+      "expected_label": 0,
+      "model_score": 0.0332,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Scientific cause vs photography tutorial"
     },
     {
       "category": "tool_substitution",
@@ -216,7 +414,7 @@
       "expected_label": 0,
       "model_score": 0.0469,
       "decision": "DISTINCT",
-      "confidence": "HIGH",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
       "contradiction_warning": false,
       "is_correct": true,
       "description": "C vs C++ language distinction"
@@ -228,10 +426,58 @@
       "expected_label": 0,
       "model_score": 0.0112,
       "decision": "DISTINCT",
-      "confidence": "HIGH",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
       "contradiction_warning": false,
       "is_correct": true,
-      "description": "Framework substitution for identical task"
+      "description": "Framework substitution (Django vs FastAPI)"
+    },
+    {
+      "category": "tool_substitution",
+      "question1": "What is the difference between MySQL and PostgreSQL?",
+      "question2": "What is the difference between MySQL and MongoDB?",
+      "expected_label": 0,
+      "model_score": 0.0188,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Database comparison swap (PostgreSQL vs MongoDB)"
+    },
+    {
+      "category": "tool_substitution",
+      "question1": "How to train an image classification model in PyTorch?",
+      "question2": "How to train an image classification model in TensorFlow?",
+      "expected_label": 0,
+      "model_score": 0.0559,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Deep learning library substitution (PyTorch vs TensorFlow)"
+    },
+    {
+      "category": "tool_substitution",
+      "question1": "How do I deploy a web application on AWS EC2?",
+      "question2": "How do I deploy a web application on Google Cloud Run?",
+      "expected_label": 0,
+      "model_score": 0.1464,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Cloud service provider substitution (AWS vs GCP)"
+    },
+    {
+      "category": "tool_substitution",
+      "question1": "How to format code automatically in VS Code?",
+      "question2": "How to format code automatically in PyCharm?",
+      "expected_label": 0,
+      "model_score": 0.035,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "IDE substitution (VS Code vs PyCharm)"
     },
     {
       "category": "paraphrase_duplicate",
@@ -240,7 +486,7 @@
       "expected_label": 1,
       "model_score": 0.0001,
       "decision": "DISTINCT",
-      "confidence": "HIGH",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
       "contradiction_warning": false,
       "is_correct": false,
       "description": "True duplicate paraphrase with zero content-word overlap"
@@ -252,10 +498,10 @@
       "expected_label": 1,
       "model_score": 0.2435,
       "decision": "DISTINCT",
-      "confidence": "MODERATE",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
       "contradiction_warning": false,
       "is_correct": false,
-      "description": "Synonym-heavy true duplicate"
+      "description": "Synonym-heavy true duplicate (salary/paid, entry level/fresher)"
     },
     {
       "category": "paraphrase_duplicate",
@@ -264,10 +510,10 @@
       "expected_label": 1,
       "model_score": 0.6131,
       "decision": "NEEDS_REVIEW",
-      "confidence": "MODERATE",
+      "decision_band": "HUMAN_REVIEW_REQUIRED",
       "contradiction_warning": false,
       "is_correct": false,
-      "description": "Paraphrased scientific question"
+      "description": "Paraphrased scientific question with synonym swaps"
     },
     {
       "category": "paraphrase_duplicate",
@@ -276,10 +522,106 @@
       "expected_label": 1,
       "model_score": 0.0013,
       "decision": "DISTINCT",
-      "confidence": "HIGH",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
       "contradiction_warning": false,
       "is_correct": false,
-      "description": "Complex situation paraphrase"
+      "description": "Complex situation paraphrase with shared underlying query"
+    },
+    {
+      "category": "paraphrase_duplicate",
+      "question1": "How do I improve my spoken English fluency and confidence?",
+      "question2": "What are the best methods to speak English more fluently?",
+      "expected_label": 1,
+      "model_score": 0.0006,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": false,
+      "description": "Language skill improvement query paraphrase"
+    },
+    {
+      "category": "paraphrase_duplicate",
+      "question1": "What is the best way to invest money for long term wealth creation?",
+      "question2": "How should one invest funds to build wealth over the long haul?",
+      "expected_label": 1,
+      "model_score": 0.8312,
+      "decision": "DUPLICATE",
+      "decision_band": "HIGH_CONFIDENCE_MERGE",
+      "contradiction_warning": false,
+      "is_correct": true,
+      "description": "Financial planning paraphrase"
+    },
+    {
+      "category": "paraphrase_duplicate",
+      "question1": "Why is my laptop computer running so slowly all of a sudden?",
+      "question2": "What causes a laptop to experience sudden severe lag and sluggishness?",
+      "expected_label": 1,
+      "model_score": 0.108,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": false,
+      "description": "Tech support query paraphrase"
+    },
+    {
+      "category": "paraphrase_duplicate",
+      "question1": "How can someone overcome insomnia and fall asleep faster at night?",
+      "question2": "What remedies help people with sleeping difficulties get to sleep quickly?",
+      "expected_label": 1,
+      "model_score": 0.0004,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": false,
+      "description": "Medical sleep problem paraphrase"
+    },
+    {
+      "category": "paraphrase_duplicate",
+      "question1": "What are effective ways to prepare for university examinations?",
+      "question2": "How should college students study to score high marks in finals?",
+      "expected_label": 1,
+      "model_score": 0.0,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": false,
+      "description": "Exam preparation paraphrase"
+    },
+    {
+      "category": "paraphrase_duplicate",
+      "question1": "Can you recommend good books for personal finance beginners?",
+      "question2": "Which financial literacy books should a novice read first?",
+      "expected_label": 1,
+      "model_score": 0.0027,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": false,
+      "description": "Book recommendation query paraphrase"
+    },
+    {
+      "category": "paraphrase_duplicate",
+      "question1": "How to remove stubborn oil stains from cotton clothing?",
+      "question2": "What is the best household remedy for grease stains on shirts?",
+      "expected_label": 1,
+      "model_score": 0.0016,
+      "decision": "DISTINCT",
+      "decision_band": "HIGH_CONFIDENCE_DISTINCT",
+      "contradiction_warning": false,
+      "is_correct": false,
+      "description": "Household cleaning remedy paraphrase"
+    },
+    {
+      "category": "paraphrase_duplicate",
+      "question1": "Is it possible to learn computer programming without a degree in CS?",
+      "question2": "Can someone become a software engineer without having studied computer science in college?",
+      "expected_label": 1,
+      "model_score": 0.6969,
+      "decision": "NEEDS_REVIEW",
+      "decision_band": "HUMAN_REVIEW_REQUIRED",
+      "contradiction_warning": true,
+      "is_correct": false,
+      "description": "Career self-study qualification paraphrase"
     }
   ]
 }
